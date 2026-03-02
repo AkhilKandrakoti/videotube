@@ -1314,7 +1314,7 @@ export default function App() {
       </header>
 
       {/* Body */}
-      <div style={{ flex: 1, display: "flex", overflow: "hidden", height: "calc(100vh - 60px)", overflowY: "auto"" }}>
+      <div style={{ flex: 1, display: "flex" }}>
         <Sidebar collapsed={sidebarCollapsed} currentPage={page} onNavigate={handleNavigate} />
         {renderPage()}
       </div>
