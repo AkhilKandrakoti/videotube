@@ -200,7 +200,7 @@ const HomePage = ({ onVideoClick, dm, onCh }) => {
   const bg=dm?"#0a0a14":"#f9f9f9";
 
   return (
-    <div style={{ flex:1, overflowY:"auto", overflowX:"hidden", padding:"0 12px 60px", background:bg, minWidth:0 }}>
+    <div style={{ flex:1, overflowY:"auto", padding:"0 20px 60px", background:bg }}>
       <div style={{ display:"flex", gap:8, overflowX:"auto", padding:"12px 0", scrollbarWidth:"none", position:"sticky", top:0, background:bg, zIndex:10 }}>
         {CATS.map(c=>(
           <button key={c} onClick={()=>setCat(c)}
@@ -211,12 +211,12 @@ const HomePage = ({ onVideoClick, dm, onCh }) => {
       </div>
       {err&&<div style={{ background:"rgba(239,68,68,0.1)", border:"1px solid rgba(239,68,68,0.3)", borderRadius:12, padding:"14px 18px", color:"#ef4444", marginBottom:20, fontSize:14 }}>⚠️ {err}</div>}
       {loading?(
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:16 }}>
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))", gap:20 }}>
           {[...Array(12)].map((_,i)=><div key={i}><Sk h={158} r={10}/><div style={{ display:"flex", gap:10, marginTop:10 }}><Sk w={36} h={36} r={18}/><div style={{ flex:1, display:"flex", flexDirection:"column", gap:6 }}><Sk h={14}/><Sk w="60%" h={12}/></div></div></div>)}
         </div>
       ):(
         <>
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:16 }}>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))", gap:20 }}>
             {videos.map(v=><VideoCard key={v.id} video={v} onClick={onVideoClick} dm={dm} onCh={onCh}/>)}
           </div>
           <div ref={loaderRef} style={{ height:60, display:"flex", alignItems:"center", justifyContent:"center" }}>
@@ -272,53 +272,53 @@ const WatchPage = ({ video, onVideoClick, dm, onCh, user, history, setHistory, l
   const tp=dm?"#f0f0f0":"#0f0f0f", ts=dm?"#8a8a9a":"#606060", bg=dm?"#0a0a14":"#f9f9f9";
 
   return (
-    <div style={{ flex:1, overflowY:"auto", overflowX:"hidden", padding:"16px 12px 80px", background:bg, minWidth:0 }}>
-      <div style={{ display:"flex", gap:24, maxWidth:1400, flexWrap:"wrap" }}>
-        <div style={{ flex:1, minWidth:0 }}>
+    <div style={{ flex:1, overflowY:"auto", padding:"24px 20px 80px", background:bg }}>
+      <div style={{ display:"flex", gap:28, maxWidth:1400, flexWrap:"wrap" }}>
+        <div style={{ flex:1, minWidth:300 }}>
           <div style={{ position:"relative", paddingTop:"56.25%", borderRadius:12, overflow:"hidden", background:"#000" }}>
             <iframe src={`https://www.youtube.com/embed/${vid}?autoplay=1&rel=0`}
               style={{ position:"absolute", inset:0, width:"100%", height:"100%", border:"none" }}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen title={sn.title}/>
           </div>
-          <h1 style={{ color:tp, fontSize:16, fontWeight:700, marginTop:12, marginBottom:10, lineHeight:1.4 }}>{sn.title}</h1>
-          <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", flexWrap:"wrap", gap:8, marginBottom:14 }}>
-            <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-              <div onClick={()=>onCh(sn.channelId,sn.channelTitle)} style={{ width:38, height:38, borderRadius:"50%", background:clr(sn.channelTitle), display:"flex", alignItems:"center", justifyContent:"center", fontSize:13, fontWeight:700, color:"#fff", cursor:"pointer" }}>{ini(sn.channelTitle)}</div>
+          <h1 style={{ color:tp, fontSize:18, fontWeight:700, marginTop:16, marginBottom:12, lineHeight:1.4 }}>{sn.title}</h1>
+          <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", flexWrap:"wrap", gap:10, marginBottom:16 }}>
+            <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+              <div onClick={()=>onCh(sn.channelId,sn.channelTitle)} style={{ width:42, height:42, borderRadius:"50%", background:clr(sn.channelTitle), display:"flex", alignItems:"center", justifyContent:"center", fontSize:14, fontWeight:700, color:"#fff", cursor:"pointer" }}>{ini(sn.channelTitle)}</div>
               <div>
-                <div onClick={()=>onCh(sn.channelId,sn.channelTitle)} style={{ color:tp, fontSize:14, fontWeight:600, cursor:"pointer" }}>{sn.channelTitle}</div>
+                <div onClick={()=>onCh(sn.channelId,sn.channelTitle)} style={{ color:tp, fontSize:15, fontWeight:600, cursor:"pointer" }}>{sn.channelTitle}</div>
               </div>
-              <button onClick={()=>setSubbed(s=>!s)} style={{ padding:"7px 14px", borderRadius:24, border:"none", cursor:"pointer", background:subbed?(dm?"rgba(255,255,255,0.1)":"#e0e0e0"):"#6366f1", color:subbed?ts:"#fff", fontSize:12, fontWeight:600 }}>{subbed?"Subscribed ✓":"Subscribe"}</button>
+              <button onClick={()=>setSubbed(s=>!s)} style={{ padding:"8px 18px", borderRadius:24, border:"none", cursor:"pointer", background:subbed?(dm?"rgba(255,255,255,0.1)":"#e0e0e0"):"#6366f1", color:subbed?ts:"#fff", fontSize:13, fontWeight:600 }}>{subbed?"Subscribed ✓":"Subscribe"}</button>
             </div>
-            <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
+            <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
               {[
                 {l:isLiked?`▲ ${fmtViews(parseInt(st.likeCount||0)+1)}`:`▲ ${fmtViews(st.likeCount)}`, a:toggleLike, on:isLiked},
                 {l:isWL?"✓ Saved":"⊕ Save", a:toggleWL, on:isWL},
                 {l:"↗ Share", a:()=>{ try{navigator.share({title:sn.title,url:`https://youtube.com/watch?v=${vid}`})}catch{navigator.clipboard.writeText(`https://youtube.com/watch?v=${vid}`)} }},
               ].map(b=>(
-                <button key={b.l} onClick={b.a} style={{ padding:"7px 12px", borderRadius:24, background:b.on?"rgba(99,102,241,0.25)":(dm?"rgba(255,255,255,0.07)":"#f0f0f0"), border:`1px solid ${b.on?"rgba(99,102,241,0.5)":(dm?"rgba(255,255,255,0.1)":"#e0e0e0")}`, color:b.on?"#8b8cf8":ts, fontSize:12, fontWeight:500, cursor:"pointer" }}>{b.l}</button>
+                <button key={b.l} onClick={b.a} style={{ padding:"8px 14px", borderRadius:24, background:b.on?"rgba(99,102,241,0.25)":(dm?"rgba(255,255,255,0.07)":"#f0f0f0"), border:`1px solid ${b.on?"rgba(99,102,241,0.5)":(dm?"rgba(255,255,255,0.1)":"#e0e0e0")}`, color:b.on?"#8b8cf8":ts, fontSize:13, fontWeight:500, cursor:"pointer" }}>{b.l}</button>
               ))}
             </div>
           </div>
-          <div style={{ background:dm?"rgba(255,255,255,0.04)":"#fff", borderRadius:12, padding:"12px 14px", marginBottom:16, border:dm?"none":"1px solid #e0e0e0" }}>
+          <div style={{ background:dm?"rgba(255,255,255,0.04)":"#fff", borderRadius:12, padding:"14px 16px", marginBottom:20, border:dm?"none":"1px solid #e0e0e0" }}>
             <div style={{ color:ts, fontSize:13, lineHeight:1.7 }}>
-              <div style={{ display:"flex", gap:12, marginBottom:6, flexWrap:"wrap", color:dm?"#aaa":"#333", fontSize:12, fontWeight:600 }}>
+              <div style={{ display:"flex", gap:16, marginBottom:8, flexWrap:"wrap", color:dm?"#aaa":"#333", fontSize:13, fontWeight:600 }}>
                 <span>{fmtViews(st.viewCount)} views</span><span>{fmtDate(sn.publishedAt)}</span>
                 <span>💬 {fmtViews(st.commentCount)}</span><span>👍 {fmtViews(st.likeCount)}</span>
               </div>
               <div style={{ whiteSpace:"pre-wrap", wordBreak:"break-word", color:ts }}>{showDesc?sn.description:(sn.description||"").slice(0,200)+"..."}</div>
             </div>
-            <button onClick={()=>setShowDesc(s=>!s)} style={{ background:"none", border:"none", color:"#6366f1", cursor:"pointer", fontSize:13, fontWeight:600, marginTop:6, padding:0 }}>{showDesc?"Show less":"...more"}</button>
+            <button onClick={()=>setShowDesc(s=>!s)} style={{ background:"none", border:"none", color:"#6366f1", cursor:"pointer", fontSize:13, fontWeight:600, marginTop:8, padding:0 }}>{showDesc?"Show less":"...more"}</button>
           </div>
-          <div style={{ fontSize:15, fontWeight:700, color:tp, marginBottom:14 }}>{fmtViews(st.commentCount)} Comments</div>
+          <div style={{ fontSize:16, fontWeight:700, color:tp, marginBottom:16 }}>{fmtViews(st.commentCount)} Comments</div>
           {user&&(
-            <div style={{ display:"flex", gap:10, marginBottom:20 }}>
-              <div style={{ width:32, height:32, borderRadius:"50%", background:"#6366f1", display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, color:"#fff", flexShrink:0 }}>{ini(user.name)}</div>
+            <div style={{ display:"flex", gap:12, marginBottom:24 }}>
+              <div style={{ width:36, height:36, borderRadius:"50%", background:"#6366f1", display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, fontWeight:700, color:"#fff", flexShrink:0 }}>{ini(user.name)}</div>
               <div style={{ flex:1 }}>
                 <input value={cmtTxt} onChange={e=>setCmtTxt(e.target.value)} placeholder="Add a comment..."
-                  style={{ width:"100%", background:"transparent", border:"none", borderBottom:`1px solid ${dm?"rgba(255,255,255,0.15)":"#e0e0e0"}`, outline:"none", color:tp, fontSize:13, padding:"6px 0", boxSizing:"border-box" }}/>
-                {cmtTxt&&<div style={{ display:"flex", justifyContent:"flex-end", gap:8, marginTop:6 }}>
-                  <button onClick={()=>setCmtTxt("")} style={{ background:"none", border:"none", color:ts, cursor:"pointer", fontSize:12 }}>Cancel</button>
-                  <button style={{ background:"#6366f1", border:"none", color:"#fff", borderRadius:20, padding:"5px 14px", cursor:"pointer", fontSize:12, fontWeight:600 }}>Comment</button>
+                  style={{ width:"100%", background:"transparent", border:"none", borderBottom:`1px solid ${dm?"rgba(255,255,255,0.15)":"#e0e0e0"}`, outline:"none", color:tp, fontSize:14, padding:"8px 0", boxSizing:"border-box" }}/>
+                {cmtTxt&&<div style={{ display:"flex", justifyContent:"flex-end", gap:8, marginTop:8 }}>
+                  <button onClick={()=>setCmtTxt("")} style={{ background:"none", border:"none", color:ts, cursor:"pointer", fontSize:13 }}>Cancel</button>
+                  <button style={{ background:"#6366f1", border:"none", color:"#fff", borderRadius:20, padding:"6px 16px", cursor:"pointer", fontSize:13, fontWeight:600 }}>Comment</button>
                 </div>}
               </div>
             </div>
@@ -326,25 +326,25 @@ const WatchPage = ({ video, onVideoClick, dm, onCh, user, history, setHistory, l
           {comments.map(c=>{
             const t=c.snippet?.topLevelComment?.snippet||{};
             return (
-              <div key={c.id} style={{ display:"flex", gap:10, marginBottom:16 }}>
-                <img src={t.authorProfileImageUrl} alt="" style={{ width:32, height:32, borderRadius:"50%", flexShrink:0, background:"#333", objectFit:"cover" }} onError={e=>e.target.style.display="none"}/>
+              <div key={c.id} style={{ display:"flex", gap:12, marginBottom:20 }}>
+                <img src={t.authorProfileImageUrl} alt="" style={{ width:36, height:36, borderRadius:"50%", flexShrink:0, background:"#333", objectFit:"cover" }} onError={e=>e.target.style.display="none"}/>
                 <div style={{ flex:1 }}>
-                  <div style={{ display:"flex", gap:8, alignItems:"center", marginBottom:3 }}>
-                    <span style={{ color:tp, fontSize:12, fontWeight:600 }}>{t.authorDisplayName}</span>
-                    <span style={{ color:dm?"#555":"#909090", fontSize:11 }}>{fmtDate(t.publishedAt)}</span>
+                  <div style={{ display:"flex", gap:8, alignItems:"center", marginBottom:4 }}>
+                    <span style={{ color:tp, fontSize:13, fontWeight:600 }}>{t.authorDisplayName}</span>
+                    <span style={{ color:dm?"#555":"#909090", fontSize:12 }}>{fmtDate(t.publishedAt)}</span>
                   </div>
-                  <div style={{ color:ts, fontSize:13, lineHeight:1.6, marginBottom:4, whiteSpace:"pre-wrap", wordBreak:"break-word" }}>{t.textDisplay}</div>
-                  <div style={{ display:"flex", gap:10 }}>
-                    <span style={{ color:dm?"#888":"#606060", fontSize:12 }}>▲ {fmtViews(t.likeCount)}</span>
-                    <button style={{ background:"none", border:"none", color:dm?"#888":"#606060", cursor:"pointer", fontSize:12 }}>Reply</button>
+                  <div style={{ color:ts, fontSize:14, lineHeight:1.6, marginBottom:6, whiteSpace:"pre-wrap", wordBreak:"break-word" }}>{t.textDisplay}</div>
+                  <div style={{ display:"flex", gap:12 }}>
+                    <span style={{ color:dm?"#888":"#606060", fontSize:13 }}>▲ {fmtViews(t.likeCount)}</span>
+                    <button style={{ background:"none", border:"none", color:dm?"#888":"#606060", cursor:"pointer", fontSize:13 }}>Reply</button>
                   </div>
                 </div>
               </div>
             );
           })}
         </div>
-        <div style={{ width:"min(360px, 100%)", flexShrink:0 }}>
-          <div style={{ fontSize:12, fontWeight:600, color:ts, marginBottom:10, textTransform:"uppercase", letterSpacing:"0.06em" }}>Up Next</div>
+        <div style={{ width:360, flexShrink:0 }}>
+          <div style={{ fontSize:13, fontWeight:600, color:ts, marginBottom:12, textTransform:"uppercase", letterSpacing:"0.06em" }}>Up Next</div>
           {related.length>0?related.map(v=><VideoCard key={v.id} video={v} onClick={onVideoClick} compact dm={dm} onCh={onCh}/>):
             [...Array(6)].map((_,i)=><div key={i} style={{ display:"flex", gap:10, marginBottom:12 }}><Sk w={130} h={73} r={8}/><div style={{ flex:1, display:"flex", flexDirection:"column", gap:6 }}><Sk h={12}/><Sk w="70%" h={10}/></div></div>)
           }
@@ -384,28 +384,28 @@ const TrendingPage = ({ onVideoClick, dm, onCh }) => {
   const bg=dm?"#0a0a14":"#f9f9f9", tp=dm?"#f0f0f0":"#0f0f0f", ts=dm?"#8a8a9a":"#606060", bdr=dm?"rgba(255,255,255,0.05)":"#e0e0e0";
 
   return (
-    <div style={{ flex:1, overflowY:"auto", overflowX:"hidden", padding:"16px 12px 80px", background:bg, minWidth:0 }}>
-      <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:20 }}>
+    <div style={{ flex:1, overflowY:"auto", padding:"24px 20px 80px", background:bg }}>
+      <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:24 }}>
         <div style={{ width:4, height:28, background:"linear-gradient(180deg,#6366f1,#ec4899)", borderRadius:2 }}/>
-        <h2 style={{ color:tp, fontSize:20, fontWeight:700, margin:0 }}>🔥 Trending</h2>
+        <h2 style={{ color:tp, fontSize:22, fontWeight:700, margin:0 }}>🔥 Trending</h2>
       </div>
-      {loading?(<div style={{ display:"flex", flexDirection:"column", gap:16 }}>{[...Array(8)].map((_,i)=><div key={i} style={{ display:"flex", gap:12 }}><Sk w={160} h={90} r={10}/><div style={{ flex:1, display:"flex", flexDirection:"column", gap:8 }}><Sk h={16}/><Sk w="50%" h={12}/></div></div>)}</div>):(
+      {loading?(<div style={{ display:"flex", flexDirection:"column", gap:16 }}>{[...Array(8)].map((_,i)=><div key={i} style={{ display:"flex", gap:16 }}><Sk w={200} h={112} r={10}/><div style={{ flex:1, display:"flex", flexDirection:"column", gap:8 }}><Sk h={16}/><Sk w="50%" h={12}/></div></div>)}</div>):(
         <>
           {videos.map((video,i)=>{
             const sn=video.snippet||{}, st=video.statistics||{};
             return (
-              <div key={video.id} onClick={()=>onVideoClick(video)} style={{ display:"flex", gap:12, padding:"12px 0", borderBottom:`1px solid ${bdr}`, cursor:"pointer" }}
+              <div key={video.id} onClick={()=>onVideoClick(video)} style={{ display:"flex", gap:16, padding:"14px 0", borderBottom:`1px solid ${bdr}`, cursor:"pointer" }}
                 onMouseEnter={e=>e.currentTarget.style.background=dm?"rgba(255,255,255,0.02)":"rgba(0,0,0,0.02)"}
                 onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-                <div style={{ fontSize:18, fontWeight:800, color:i<3?"#6366f1":(dm?"#333":"#ccc"), width:30, textAlign:"center", paddingTop:4, flexShrink:0 }}>{i+1}</div>
-                <div style={{ position:"relative", width:160, height:90, flexShrink:0, borderRadius:10, overflow:"hidden", background:"#1a1a2e" }}>
+                <div style={{ fontSize:22, fontWeight:800, color:i<3?"#6366f1":(dm?"#333":"#ccc"), width:36, textAlign:"center", paddingTop:4, flexShrink:0 }}>{i+1}</div>
+                <div style={{ position:"relative", width:200, height:112, flexShrink:0, borderRadius:10, overflow:"hidden", background:"#1a1a2e" }}>
                   {sn.thumbnails?.medium?.url&&<img src={sn.thumbnails.medium.url} alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }} loading="lazy"/>}
                 </div>
-                <div style={{ flex:1, minWidth:0 }}>
-                  <div style={{ fontSize:14, fontWeight:600, color:tp, marginBottom:6, lineHeight:1.4, display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical", overflow:"hidden" }}>{sn.title}</div>
-                  <div onClick={e=>{e.stopPropagation();onCh(sn.channelId,sn.channelTitle);}} style={{ fontSize:12, color:ts, marginBottom:4, cursor:"pointer" }}>{sn.channelTitle}</div>
-                  <div style={{ display:"flex", gap:10, fontSize:11, color:dm?"#666":"#909090", flexWrap:"wrap" }}>
-                    <span>{fmtViews(st.viewCount)} views</span><span>{fmtDate(sn.publishedAt)}</span>
+                <div style={{ flex:1 }}>
+                  <div style={{ fontSize:16, fontWeight:600, color:tp, marginBottom:8, lineHeight:1.4 }}>{sn.title}</div>
+                  <div onClick={e=>{e.stopPropagation();onCh(sn.channelId,sn.channelTitle);}} style={{ fontSize:13, color:ts, marginBottom:4, cursor:"pointer" }}>{sn.channelTitle}</div>
+                  <div style={{ display:"flex", gap:16, fontSize:12, color:dm?"#666":"#909090" }}>
+                    <span>{fmtViews(st.viewCount)} views</span><span>{fmtDate(sn.publishedAt)}</span><span>▲ {fmtViews(st.likeCount)}</span>
                   </div>
                 </div>
               </div>
@@ -472,33 +472,33 @@ const ChannelPage = ({ channelId, channelName, onVideoClick, dm, subs, setSubs }
   const name=sn.title||channelName, banner=channel?.brandingSettings?.image?.bannerExternalUrl, avatar=sn.thumbnails?.high?.url||sn.thumbnails?.default?.url;
 
   return (
-    <div style={{ flex:1, overflowY:"auto", overflowX:"hidden", background:bg, minWidth:0 }}>
-      <div style={{ height:140, background:banner?`url(${banner}) center/cover no-repeat`:`linear-gradient(135deg,${clr(name)}33,${clr(name)}88,#0a0a1a)` }}/>
-      <div style={{ padding:"0 16px 16px", borderBottom:`1px solid ${bdr}` }}>
-        <div style={{ display:"flex", alignItems:"flex-end", gap:14, marginTop:-36, marginBottom:12, flexWrap:"wrap" }}>
-          {avatar?<img src={avatar} alt="" style={{ width:72, height:72, borderRadius:"50%", border:`4px solid ${bg}`, flexShrink:0, objectFit:"cover" }}/>:
-            <div style={{ width:72, height:72, borderRadius:"50%", background:clr(name), display:"flex", alignItems:"center", justifyContent:"center", fontSize:26, fontWeight:700, color:"#fff", border:`4px solid ${bg}`, flexShrink:0 }}>{ini(name)}</div>}
-          <div style={{ flex:1, paddingBottom:4, minWidth:0 }}>
-            <div style={{ fontSize:18, fontWeight:800, color:tp, marginBottom:3 }}>{name}</div>
-            <div style={{ fontSize:12, color:ts }}>{fmtViews(st.subscriberCount)} subscribers · {fmtViews(st.videoCount)} videos</div>
+    <div style={{ flex:1, overflowY:"auto", background:bg }}>
+      <div style={{ height:180, background:banner?`url(${banner}) center/cover no-repeat`:`linear-gradient(135deg,${clr(name)}33,${clr(name)}88,#0a0a1a)` }}/>
+      <div style={{ padding:"0 28px 20px", borderBottom:`1px solid ${bdr}` }}>
+        <div style={{ display:"flex", alignItems:"flex-end", gap:20, marginTop:-40, marginBottom:16 }}>
+          {avatar?<img src={avatar} alt="" style={{ width:88, height:88, borderRadius:"50%", border:`4px solid ${bg}`, flexShrink:0, objectFit:"cover" }}/>:
+            <div style={{ width:88, height:88, borderRadius:"50%", background:clr(name), display:"flex", alignItems:"center", justifyContent:"center", fontSize:32, fontWeight:700, color:"#fff", border:`4px solid ${bg}`, flexShrink:0 }}>{ini(name)}</div>}
+          <div style={{ flex:1, paddingBottom:4 }}>
+            <div style={{ fontSize:22, fontWeight:800, color:tp, marginBottom:4 }}>{name}</div>
+            <div style={{ fontSize:13, color:ts }}>{fmtViews(st.subscriberCount)} subscribers · {fmtViews(st.videoCount)} videos · {fmtViews(st.viewCount)} total views</div>
           </div>
-          <button onClick={toggleSub} style={{ padding:"8px 18px", borderRadius:24, border:"none", cursor:"pointer", background:isSubbed?(dm?"rgba(255,255,255,0.1)":"#e0e0e0"):"#6366f1", color:isSubbed?ts:"#fff", fontSize:13, fontWeight:600 }}>{isSubbed?"Subscribed ✓":"Subscribe"}</button>
+          <button onClick={toggleSub} style={{ padding:"10px 24px", borderRadius:24, border:"none", cursor:"pointer", background:isSubbed?(dm?"rgba(255,255,255,0.1)":"#e0e0e0"):"#6366f1", color:isSubbed?ts:"#fff", fontSize:14, fontWeight:600 }}>{isSubbed?"Subscribed ✓":"Subscribe"}</button>
         </div>
         <div style={{ display:"flex" }}>
           {["Videos","About"].map(t=>(
-            <button key={t} onClick={()=>setTab(t)} style={{ background:"none", border:"none", borderBottom:`2px solid ${tab===t?"#6366f1":"transparent"}`, color:tab===t?tp:ts, padding:"8px 16px", cursor:"pointer", fontSize:13, fontWeight:tab===t?700:500 }}>{t}</button>
+            <button key={t} onClick={()=>setTab(t)} style={{ background:"none", border:"none", borderBottom:`2px solid ${tab===t?"#6366f1":"transparent"}`, color:tab===t?tp:ts, padding:"10px 20px", cursor:"pointer", fontSize:14, fontWeight:tab===t?700:500 }}>{t}</button>
           ))}
         </div>
       </div>
-      <div style={{ padding:"16px" }}>
+      <div style={{ padding:"24px 28px" }}>
         {tab==="Videos"&&(
           loading?(
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(240px,1fr))", gap:16 }}>
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(240px,1fr))", gap:20 }}>
               {[...Array(8)].map((_,i)=><div key={i}><Sk h={135} r={10}/><div style={{ display:"flex", gap:10, marginTop:10 }}><Sk w={36} h={36} r={18}/><div style={{ flex:1, display:"flex", flexDirection:"column", gap:6 }}><Sk h={14}/><Sk w="60%" h={12}/></div></div></div>)}
             </div>
           ):(
             <>
-              <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(240px,1fr))", gap:16 }}>
+              <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(240px,1fr))", gap:20 }}>
                 {videos.map(v=><VideoCard key={v.id} video={v} onClick={onVideoClick} dm={dm} onCh={()=>{}}/>)}
               </div>
               <div ref={loaderRef} style={{ height:60, display:"flex", alignItems:"center", justifyContent:"center" }}>
@@ -509,10 +509,10 @@ const ChannelPage = ({ channelId, channelName, onVideoClick, dm, subs, setSubs }
         )}
         {tab==="About"&&(
           <div style={{ maxWidth:600 }}>
-            <div style={{ color:ts, fontSize:14, lineHeight:1.8, marginBottom:16 }}>{sn.description||"No description."}</div>
+            <div style={{ color:ts, fontSize:15, lineHeight:1.8, marginBottom:20 }}>{sn.description||"No description."}</div>
             {[["Subscribers",fmtViews(st.subscriberCount)],["Total Views",fmtViews(st.viewCount)],["Videos",fmtViews(st.videoCount)],["Joined",sn.publishedAt?new Date(sn.publishedAt).toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"}):"—"]].map(([k,v])=>(
-              <div key={k} style={{ display:"flex", gap:16, fontSize:13, marginBottom:8 }}>
-                <span style={{ color:dm?"#666":"#909090", width:120 }}>{k}</span><span style={{ color:tp }}>{v}</span>
+              <div key={k} style={{ display:"flex", gap:16, fontSize:14, marginBottom:10 }}>
+                <span style={{ color:dm?"#666":"#909090", width:130 }}>{k}</span><span style={{ color:tp }}>{v}</span>
               </div>
             ))}
           </div>
@@ -555,24 +555,25 @@ const SearchPage = ({ query, onVideoClick, dm, onCh }) => {
   const bg=dm?"#0a0a14":"#f9f9f9", tp=dm?"#f0f0f0":"#0f0f0f", ts=dm?"#666":"#606060";
 
   return (
-    <div style={{ flex:1, overflowY:"auto", overflowX:"hidden", padding:"16px 12px 80px", background:bg, minWidth:0 }}>
-      <div style={{ marginBottom:12, color:ts, fontSize:13 }}>{loading?"Searching...":videos.length===0?`No results for "${query}"`:` ${videos.length}+ results for "${query}"`}</div>
-      {loading?(<div style={{ display:"flex", flexDirection:"column", gap:16 }}>{[...Array(6)].map((_,i)=><div key={i} style={{ display:"flex", gap:12 }}><Sk w={160} h={90} r={10}/><div style={{ flex:1, display:"flex", flexDirection:"column", gap:8 }}><Sk h={16}/><Sk w="40%" h={12}/></div></div>)}</div>):(
+    <div style={{ flex:1, overflowY:"auto", padding:"24px 20px 80px", background:bg }}>
+      <div style={{ marginBottom:16, color:ts, fontSize:14 }}>{loading?"Searching...":videos.length===0?`No results for "${query}"`:` ${videos.length}+ results for "${query}"`}</div>
+      {loading?(<div style={{ display:"flex", flexDirection:"column", gap:16 }}>{[...Array(6)].map((_,i)=><div key={i} style={{ display:"flex", gap:16 }}><Sk w={248} h={140} r={10}/><div style={{ flex:1, display:"flex", flexDirection:"column", gap:8 }}><Sk h={16}/><Sk w="40%" h={12}/><Sk w="60%" h={12}/></div></div>)}</div>):(
         <>
-          <div style={{ display:"flex", flexDirection:"column", gap:4 }}>
+          <div style={{ display:"flex", flexDirection:"column", gap:4, maxWidth:900 }}>
             {videos.map(video=>{
               const sn=video.snippet||{}, st=video.statistics||{};
               return (
-                <div key={video.id} onClick={()=>onVideoClick(video)} style={{ display:"flex", gap:12, cursor:"pointer", borderRadius:12, padding:8 }}
+                <div key={video.id} onClick={()=>onVideoClick(video)} style={{ display:"flex", gap:16, cursor:"pointer", borderRadius:12, padding:8 }}
                   onMouseEnter={e=>e.currentTarget.style.background=dm?"rgba(255,255,255,0.03)":"rgba(0,0,0,0.03)"}
                   onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-                  <div style={{ position:"relative", width:160, height:90, flexShrink:0, borderRadius:10, overflow:"hidden", background:"#1a1a2e" }}>
+                  <div style={{ position:"relative", width:248, height:140, flexShrink:0, borderRadius:10, overflow:"hidden", background:"#1a1a2e" }}>
                     {sn.thumbnails?.medium?.url&&<img src={sn.thumbnails.medium.url} alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }} loading="lazy"/>}
                   </div>
-                  <div style={{ flex:1, minWidth:0, paddingTop:2 }}>
-                    <div style={{ fontSize:14, fontWeight:600, color:tp, marginBottom:6, lineHeight:1.4, display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical", overflow:"hidden" }}>{sn.title}</div>
-                    <div style={{ fontSize:11, color:ts, marginBottom:4 }}>{fmtViews(st.viewCount)} views · {fmtDate(sn.publishedAt)}</div>
-                    <div onClick={e=>{e.stopPropagation();onCh(sn.channelId,sn.channelTitle);}} style={{ fontSize:12, color:dm?"#8a8a9a":"#606060", cursor:"pointer" }}>{sn.channelTitle}</div>
+                  <div style={{ flex:1, paddingTop:4 }}>
+                    <div style={{ fontSize:16, fontWeight:600, color:tp, marginBottom:8, lineHeight:1.4 }}>{sn.title}</div>
+                    <div style={{ fontSize:12, color:ts, marginBottom:6 }}>{fmtViews(st.viewCount)} views · {fmtDate(sn.publishedAt)}</div>
+                    <div onClick={e=>{e.stopPropagation();onCh(sn.channelId,sn.channelTitle);}} style={{ fontSize:13, color:dm?"#8a8a9a":"#606060", marginBottom:8, cursor:"pointer" }}>{sn.channelTitle}</div>
+                    <div style={{ fontSize:13, color:ts, lineHeight:1.5, display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical", overflow:"hidden" }}>{sn.description}</div>
                   </div>
                 </div>
               );
@@ -594,33 +595,33 @@ const HistoryPage = ({ history, setHistory, onVideoClick, dm }) => {
   const bg=dm?"#0a0a14":"#f9f9f9", tp=dm?"#f0f0f0":"#0f0f0f", ts=dm?"#8a8a9a":"#606060", bdr=dm?"rgba(255,255,255,0.05)":"#e0e0e0";
 
   return (
-    <div style={{ flex:1, overflowY:"auto", overflowX:"hidden", padding:"16px 12px 80px", background:bg, minWidth:0 }}>
-      <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:20 }}>
-        <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-          <div style={{ width:4, height:26, background:"linear-gradient(180deg,#6366f1,#ec4899)", borderRadius:2 }}/>
-          <h2 style={{ color:tp, fontSize:20, fontWeight:700, margin:0 }}>📜 Watch History</h2>
+    <div style={{ flex:1, overflowY:"auto", padding:"24px 28px 80px", background:bg }}>
+      <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:24 }}>
+        <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+          <div style={{ width:4, height:28, background:"linear-gradient(180deg,#6366f1,#ec4899)", borderRadius:2 }}/>
+          <h2 style={{ color:tp, fontSize:22, fontWeight:700, margin:0 }}>📜 Watch History</h2>
         </div>
-        {history.length>0&&<button onClick={clear} style={{ background:"rgba(239,68,68,0.1)", border:"1px solid rgba(239,68,68,0.3)", color:"#ef4444", padding:"7px 14px", borderRadius:20, cursor:"pointer", fontSize:12, fontWeight:600 }}>Clear All</button>}
+        {history.length>0&&<button onClick={clear} style={{ background:"rgba(239,68,68,0.1)", border:"1px solid rgba(239,68,68,0.3)", color:"#ef4444", padding:"8px 16px", borderRadius:20, cursor:"pointer", fontSize:13, fontWeight:600 }}>Clear All</button>}
       </div>
       {history.length===0?(
-        <div style={{ textAlign:"center", padding:"60px 20px" }}>
-          <div style={{ fontSize:44, marginBottom:14 }}>📺</div>
-          <div style={{ color:tp, fontSize:16, fontWeight:600, marginBottom:6 }}>No watch history yet</div>
-          <div style={{ color:ts, fontSize:13 }}>Videos you watch will appear here</div>
+        <div style={{ textAlign:"center", padding:"80px 20px" }}>
+          <div style={{ fontSize:48, marginBottom:16 }}>📺</div>
+          <div style={{ color:tp, fontSize:18, fontWeight:600, marginBottom:8 }}>No watch history yet</div>
+          <div style={{ color:ts, fontSize:14 }}>Videos you watch will appear here</div>
         </div>
       ):history.map(video=>{
         const sn=video.snippet||{}, st=video.statistics||{}, vid=video.id?.videoId||video.id;
         return (
-          <div key={vid} style={{ display:"flex", gap:12, padding:"10px 0", borderBottom:`1px solid ${bdr}`, alignItems:"center" }}>
-            <div onClick={()=>onVideoClick(video)} style={{ position:"relative", width:160, height:90, flexShrink:0, borderRadius:10, overflow:"hidden", background:"#1a1a2e", cursor:"pointer" }}>
+          <div key={vid} style={{ display:"flex", gap:16, padding:"12px 0", borderBottom:`1px solid ${bdr}`, alignItems:"center" }}>
+            <div onClick={()=>onVideoClick(video)} style={{ position:"relative", width:200, height:112, flexShrink:0, borderRadius:10, overflow:"hidden", background:"#1a1a2e", cursor:"pointer" }}>
               {sn.thumbnails?.medium?.url&&<img src={sn.thumbnails.medium.url} alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }} loading="lazy"/>}
             </div>
-            <div style={{ flex:1, cursor:"pointer", minWidth:0 }} onClick={()=>onVideoClick(video)}>
-              <div style={{ fontSize:13, fontWeight:600, color:tp, marginBottom:5, lineHeight:1.4, display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical", overflow:"hidden" }}>{sn.title}</div>
-              <div style={{ fontSize:12, color:ts, marginBottom:3 }}>{sn.channelTitle}</div>
-              <div style={{ fontSize:11, color:dm?"#555":"#909090" }}>{fmtViews(st.viewCount)} views</div>
+            <div style={{ flex:1, cursor:"pointer" }} onClick={()=>onVideoClick(video)}>
+              <div style={{ fontSize:15, fontWeight:600, color:tp, marginBottom:6, lineHeight:1.4 }}>{sn.title}</div>
+              <div style={{ fontSize:13, color:ts, marginBottom:4 }}>{sn.channelTitle}</div>
+              <div style={{ fontSize:12, color:dm?"#555":"#909090" }}>{fmtViews(st.viewCount)} views · {fmtDate(sn.publishedAt)}</div>
             </div>
-            <button onClick={()=>remove(vid)} style={{ background:"none", border:"none", color:dm?"#555":"#909090", cursor:"pointer", fontSize:18, padding:6, flexShrink:0 }}>✕</button>
+            <button onClick={()=>remove(vid)} style={{ background:"none", border:"none", color:dm?"#555":"#909090", cursor:"pointer", fontSize:20, padding:8 }}>✕</button>
           </div>
         );
       })}
@@ -628,34 +629,35 @@ const HistoryPage = ({ history, setHistory, onVideoClick, dm }) => {
   );
 };
 
-// SAVED PAGE
+// SAVED PAGE (liked / watch later)
 const SavedPage = ({ items, setItems, stKey, title, icon, emptyMsg, onVideoClick, dm }) => {
   const clear = () => { setItems([]); storage.set(stKey,[]); };
   const remove = (vid) => { const n=items.filter(v=>(v.id?.videoId||v.id)!==vid); setItems(n); storage.set(stKey,n); };
   const bg=dm?"#0a0a14":"#f9f9f9", tp=dm?"#f0f0f0":"#0f0f0f", ts=dm?"#8a8a9a":"#606060";
 
   return (
-    <div style={{ flex:1, overflowY:"auto", overflowX:"hidden", padding:"16px 12px 80px", background:bg, minWidth:0 }}>
-      <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:20 }}>
-        <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-          <div style={{ width:4, height:26, background:"linear-gradient(180deg,#6366f1,#ec4899)", borderRadius:2 }}/>
-          <h2 style={{ color:tp, fontSize:20, fontWeight:700, margin:0 }}>{icon} {title}</h2>
+    <div style={{ flex:1, overflowY:"auto", padding:"24px 28px 80px", background:bg }}>
+      <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:24 }}>
+        <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+          <div style={{ width:4, height:28, background:"linear-gradient(180deg,#6366f1,#ec4899)", borderRadius:2 }}/>
+          <h2 style={{ color:tp, fontSize:22, fontWeight:700, margin:0 }}>{icon} {title}</h2>
         </div>
-        {items.length>0&&<button onClick={clear} style={{ background:"rgba(239,68,68,0.1)", border:"1px solid rgba(239,68,68,0.3)", color:"#ef4444", padding:"7px 14px", borderRadius:20, cursor:"pointer", fontSize:12, fontWeight:600 }}>Clear All</button>}
+        {items.length>0&&<button onClick={clear} style={{ background:"rgba(239,68,68,0.1)", border:"1px solid rgba(239,68,68,0.3)", color:"#ef4444", padding:"8px 16px", borderRadius:20, cursor:"pointer", fontSize:13, fontWeight:600 }}>Clear All</button>}
       </div>
       {items.length===0?(
-        <div style={{ textAlign:"center", padding:"60px 20px" }}>
-          <div style={{ fontSize:44, marginBottom:14 }}>{icon}</div>
-          <div style={{ color:tp, fontSize:16, fontWeight:600, marginBottom:6 }}>{emptyMsg}</div>
+        <div style={{ textAlign:"center", padding:"80px 20px" }}>
+          <div style={{ fontSize:48, marginBottom:16 }}>{icon}</div>
+          <div style={{ color:tp, fontSize:18, fontWeight:600, marginBottom:8 }}>{emptyMsg}</div>
+          <div style={{ color:ts, fontSize:14 }}>Videos you save will appear here</div>
         </div>
       ):(
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(240px,1fr))", gap:16 }}>
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))", gap:20 }}>
           {items.map(video=>{
             const vid=video.id?.videoId||video.id;
             return (
               <div key={vid} style={{ position:"relative" }}>
                 <VideoCard video={video} onClick={onVideoClick} dm={dm} onCh={()=>{}}/>
-                <button onClick={()=>remove(vid)} style={{ position:"absolute", top:8, right:8, background:"rgba(0,0,0,0.7)", border:"none", color:"#fff", borderRadius:"50%", width:26, height:26, cursor:"pointer", fontSize:13, display:"flex", alignItems:"center", justifyContent:"center" }}>✕</button>
+                <button onClick={()=>remove(vid)} style={{ position:"absolute", top:8, right:8, background:"rgba(0,0,0,0.7)", border:"none", color:"#fff", borderRadius:"50%", width:28, height:28, cursor:"pointer", fontSize:14, display:"flex", alignItems:"center", justifyContent:"center" }}>✕</button>
               </div>
             );
           })}
@@ -689,23 +691,23 @@ const SubsPage = ({ subs, onVideoClick, dm, onCh }) => {
   }, [subs]);
 
   return (
-    <div style={{ flex:1, overflowY:"auto", overflowX:"hidden", padding:"16px 12px 80px", background:bg, minWidth:0 }}>
-      <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:20 }}>
-        <div style={{ width:4, height:26, background:"linear-gradient(180deg,#6366f1,#ec4899)", borderRadius:2 }}/>
-        <h2 style={{ color:tp, fontSize:20, fontWeight:700, margin:0 }}>📢 Subscriptions</h2>
+    <div style={{ flex:1, overflowY:"auto", padding:"24px 28px 80px", background:bg }}>
+      <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:24 }}>
+        <div style={{ width:4, height:28, background:"linear-gradient(180deg,#6366f1,#ec4899)", borderRadius:2 }}/>
+        <h2 style={{ color:tp, fontSize:22, fontWeight:700, margin:0 }}>📢 Subscriptions</h2>
       </div>
       {!subs||subs.length===0?(
-        <div style={{ textAlign:"center", padding:"60px 20px" }}>
-          <div style={{ fontSize:44, marginBottom:14 }}>📢</div>
-          <div style={{ color:tp, fontSize:16, fontWeight:600, marginBottom:6 }}>No subscriptions yet</div>
-          <div style={{ color:ts, fontSize:13 }}>Click Subscribe on any channel to see their videos here</div>
+        <div style={{ textAlign:"center", padding:"80px 20px" }}>
+          <div style={{ fontSize:48, marginBottom:16 }}>📢</div>
+          <div style={{ color:tp, fontSize:18, fontWeight:600, marginBottom:8 }}>No subscriptions yet</div>
+          <div style={{ color:ts, fontSize:14 }}>Click Subscribe on any channel to see their videos here</div>
         </div>
       ):loading?(
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(240px,1fr))", gap:16 }}>
-          {[...Array(8)].map((_,i)=><div key={i}><Sk h={135} r={10}/></div>)}
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))", gap:20 }}>
+          {[...Array(8)].map((_,i)=><div key={i}><Sk h={158} r={10}/><div style={{ display:"flex", gap:10, marginTop:10 }}><Sk w={36} h={36} r={18}/><div style={{ flex:1, display:"flex", flexDirection:"column", gap:6 }}><Sk h={14}/><Sk w="60%" h={12}/></div></div></div>)}
         </div>
       ):(
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(240px,1fr))", gap:16 }}>
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))", gap:20 }}>
           {videos.map(v=><VideoCard key={v.id} video={v} onClick={onVideoClick} dm={dm} onCh={onCh}/>)}
         </div>
       )}
@@ -728,22 +730,22 @@ const LivePage = ({ onVideoClick, dm, onCh }) => {
   }, []);
 
   return (
-    <div style={{ flex:1, overflowY:"auto", overflowX:"hidden", padding:"16px 12px 80px", background:bg, minWidth:0 }}>
-      <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:6 }}>
+    <div style={{ flex:1, overflowY:"auto", padding:"24px 20px 80px", background:bg }}>
+      <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:8 }}>
         <div style={{ width:10, height:10, borderRadius:"50%", background:"#ef4444", animation:"pulse 1.5s infinite" }}/>
-        <h2 style={{ color:tp, fontSize:20, fontWeight:700, margin:0 }}>Live Now</h2>
+        <h2 style={{ color:tp, fontSize:22, fontWeight:700, margin:0 }}>Live Now</h2>
       </div>
-      <div style={{ color:ts, fontSize:13, marginBottom:20 }}>Live and recent streams from around the world</div>
+      <div style={{ color:ts, fontSize:13, marginBottom:24 }}>Live and recent streams from around the world</div>
       {loading?(
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(240px,1fr))", gap:16 }}>
-          {[...Array(8)].map((_,i)=><div key={i}><Sk h={135} r={10}/></div>)}
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))", gap:20 }}>
+          {[...Array(8)].map((_,i)=><div key={i}><Sk h={158} r={10}/></div>)}
         </div>
       ):(
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(240px,1fr))", gap:16 }}>
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))", gap:20 }}>
           {videos.map((video,i)=>{
             const sn=video.snippet||{};
             return (
-              <div key={video.id} onClick={()=>onVideoClick(video)} style={{ cursor:"pointer", borderRadius:12, overflow:"hidden", background:dm?"#141420":"#fff", transition:"transform 0.2s" }}
+              <div key={video.id} onClick={()=>onVideoClick(video)} style={{ cursor:"pointer", borderRadius:12, overflow:"hidden", background:dm?"#141420":"#fff" }}
                 onMouseEnter={e=>e.currentTarget.style.transform="translateY(-2px)"}
                 onMouseLeave={e=>e.currentTarget.style.transform="translateY(0)"}>
                 <div style={{ position:"relative", paddingTop:"56.25%", background:"#1a1a2e" }}>
@@ -752,10 +754,10 @@ const LivePage = ({ onVideoClick, dm, onCh }) => {
                   <div style={{ position:"absolute", bottom:8, right:8, background:"rgba(0,0,0,0.8)", color:"#fff", fontSize:11, padding:"2px 8px", borderRadius:4 }}>👁 {fmtViews(counts[i])} watching</div>
                 </div>
                 <div style={{ padding:"10px", display:"flex", gap:10 }}>
-                  <div onClick={e=>{e.stopPropagation();onCh(sn.channelId,sn.channelTitle);}} style={{ width:32, height:32, borderRadius:"50%", background:clr(sn.channelTitle), display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, color:"#fff", flexShrink:0, cursor:"pointer" }}>{ini(sn.channelTitle)}</div>
+                  <div onClick={e=>{e.stopPropagation();onCh(sn.channelId,sn.channelTitle);}} style={{ width:36, height:36, borderRadius:"50%", background:clr(sn.channelTitle), display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, fontWeight:700, color:"#fff", flexShrink:0, cursor:"pointer" }}>{ini(sn.channelTitle)}</div>
                   <div style={{ flex:1, minWidth:0 }}>
-                    <div style={{ fontSize:13, fontWeight:600, color:tp, lineHeight:1.4, marginBottom:3, display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical", overflow:"hidden" }}>{sn.title}</div>
-                    <div style={{ fontSize:11, color:ts }}>{sn.channelTitle}</div>
+                    <div style={{ fontSize:14, fontWeight:600, color:tp, lineHeight:1.4, marginBottom:4, display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical", overflow:"hidden" }}>{sn.title}</div>
+                    <div style={{ fontSize:12, color:ts }}>{sn.channelTitle}</div>
                   </div>
                 </div>
               </div>
@@ -782,59 +784,59 @@ const UploadPage = ({ dm }) => {
   };
 
   return (
-    <div style={{ flex:1, overflowY:"auto", overflowX:"hidden", padding:"16px 12px 80px", background:bg, minWidth:0 }}>
-      <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:24 }}>
-        <div style={{ width:4, height:26, background:"linear-gradient(180deg,#6366f1,#ec4899)", borderRadius:2 }}/>
-        <h2 style={{ color:tp, fontSize:20, fontWeight:700, margin:0 }}>Upload Studio</h2>
+    <div style={{ flex:1, overflowY:"auto", padding:"28px 32px 80px", background:bg }}>
+      <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:28 }}>
+        <div style={{ width:4, height:28, background:"linear-gradient(180deg,#6366f1,#ec4899)", borderRadius:2 }}/>
+        <h2 style={{ color:tp, fontSize:22, fontWeight:700, margin:0 }}>Upload Studio</h2>
       </div>
       {stage==="select"&&(
         <div onDragOver={e=>{e.preventDefault();setDragOver(true);}} onDragLeave={()=>setDragOver(false)}
           onDrop={e=>{e.preventDefault();setDragOver(false);setStage("details");}} onClick={()=>setStage("details")}
-          style={{ border:`2px dashed ${dragOver?"#6366f1":ibdr}`, borderRadius:20, padding:"50px 24px", textAlign:"center", cursor:"pointer", background:dragOver?"rgba(99,102,241,0.05)":ib }}>
-          <div style={{ fontSize:48, marginBottom:14 }}>📹</div>
-          <div style={{ fontSize:18, fontWeight:700, color:tp, marginBottom:6 }}>Drag & drop your video here</div>
-          <div style={{ fontSize:13, color:dm?"#666":"#909090", marginBottom:18 }}>MP4, MKV, MOV, AVI · Up to 128GB</div>
-          <button style={{ padding:"11px 24px", background:"#6366f1", border:"none", borderRadius:24, color:"#fff", fontSize:14, fontWeight:600, cursor:"pointer" }}>Select File</button>
+          style={{ border:`2px dashed ${dragOver?"#6366f1":ibdr}`, borderRadius:20, padding:"60px 40px", textAlign:"center", cursor:"pointer", background:dragOver?"rgba(99,102,241,0.05)":ib }}>
+          <div style={{ fontSize:56, marginBottom:16 }}>📹</div>
+          <div style={{ fontSize:20, fontWeight:700, color:tp, marginBottom:8 }}>Drag & drop your video here</div>
+          <div style={{ fontSize:14, color:dm?"#666":"#909090", marginBottom:20 }}>MP4, MKV, MOV, AVI · Up to 128GB</div>
+          <button style={{ padding:"12px 28px", background:"#6366f1", border:"none", borderRadius:24, color:"#fff", fontSize:15, fontWeight:600, cursor:"pointer" }}>Select File</button>
         </div>
       )}
       {stage==="details"&&(
-        <div style={{ maxWidth:560 }}>
-          <div style={{ marginBottom:16 }}>
-            <label style={{ display:"block", color:dm?"#888":"#606060", fontSize:12, marginBottom:5, textTransform:"uppercase", letterSpacing:"0.06em" }}>Title *</label>
+        <div style={{ maxWidth:600 }}>
+          <div style={{ marginBottom:18 }}>
+            <label style={{ display:"block", color:dm?"#888":"#606060", fontSize:12, marginBottom:6, textTransform:"uppercase", letterSpacing:"0.06em" }}>Title *</label>
             <input value={title} onChange={e=>setTitle(e.target.value)} placeholder="Add a title..."
-              style={{ width:"100%", background:ib, border:`1px solid ${ibdr}`, borderRadius:10, padding:"11px 13px", color:tp, fontSize:13, outline:"none", boxSizing:"border-box" }}/>
+              style={{ width:"100%", background:ib, border:`1px solid ${ibdr}`, borderRadius:10, padding:"12px 14px", color:tp, fontSize:14, outline:"none", boxSizing:"border-box" }}/>
           </div>
-          <div style={{ marginBottom:16 }}>
-            <label style={{ display:"block", color:dm?"#888":"#606060", fontSize:12, marginBottom:5, textTransform:"uppercase", letterSpacing:"0.06em" }}>Description</label>
-            <textarea value={desc} onChange={e=>setDesc(e.target.value)} placeholder="Tell viewers about your video..." rows={4}
-              style={{ width:"100%", background:ib, border:`1px solid ${ibdr}`, borderRadius:10, padding:"11px 13px", color:tp, fontSize:13, outline:"none", resize:"vertical", boxSizing:"border-box" }}/>
+          <div style={{ marginBottom:18 }}>
+            <label style={{ display:"block", color:dm?"#888":"#606060", fontSize:12, marginBottom:6, textTransform:"uppercase", letterSpacing:"0.06em" }}>Description</label>
+            <textarea value={desc} onChange={e=>setDesc(e.target.value)} placeholder="Tell viewers about your video..." rows={5}
+              style={{ width:"100%", background:ib, border:`1px solid ${ibdr}`, borderRadius:10, padding:"12px 14px", color:tp, fontSize:14, outline:"none", resize:"vertical", boxSizing:"border-box" }}/>
           </div>
-          <div style={{ display:"flex", gap:10 }}>
-            <button onClick={simulate} style={{ padding:"12px 28px", background:"#6366f1", border:"none", borderRadius:24, color:"#fff", fontSize:14, fontWeight:700, cursor:"pointer" }}>Upload & Publish</button>
-            <button onClick={()=>setStage("select")} style={{ padding:"12px 20px", background:"transparent", border:`1px solid ${ibdr}`, borderRadius:24, color:dm?"#888":"#606060", fontSize:14, cursor:"pointer" }}>Cancel</button>
+          <div style={{ display:"flex", gap:12 }}>
+            <button onClick={simulate} style={{ padding:"13px 32px", background:"#6366f1", border:"none", borderRadius:24, color:"#fff", fontSize:15, fontWeight:700, cursor:"pointer" }}>Upload & Publish</button>
+            <button onClick={()=>setStage("select")} style={{ padding:"13px 24px", background:"transparent", border:`1px solid ${ibdr}`, borderRadius:24, color:dm?"#888":"#606060", fontSize:15, cursor:"pointer" }}>Cancel</button>
           </div>
         </div>
       )}
       {stage==="processing"&&(
-        <div style={{ textAlign:"center", padding:"50px 20px" }}>
-          <div style={{ fontSize:44, marginBottom:16 }}>⚡</div>
-          <h3 style={{ color:tp, marginBottom:6 }}>Processing your video...</h3>
-          <div style={{ color:dm?"#666":"#909090", marginBottom:28, fontSize:13 }}>Transcoding · Generating HLS · Distributing to CDN</div>
-          <div style={{ maxWidth:380, margin:"0 auto" }}>
-            <div style={{ background:dm?"rgba(255,255,255,0.07)":"#e0e0e0", borderRadius:8, height:8, overflow:"hidden", marginBottom:6 }}>
+        <div style={{ textAlign:"center", padding:"60px 20px" }}>
+          <div style={{ fontSize:48, marginBottom:20 }}>⚡</div>
+          <h3 style={{ color:tp, marginBottom:8 }}>Processing your video...</h3>
+          <div style={{ color:dm?"#666":"#909090", marginBottom:32 }}>Transcoding · Generating HLS · Distributing to CDN</div>
+          <div style={{ maxWidth:400, margin:"0 auto" }}>
+            <div style={{ background:dm?"rgba(255,255,255,0.07)":"#e0e0e0", borderRadius:8, height:8, overflow:"hidden", marginBottom:8 }}>
               <div style={{ width:`${progress}%`, height:"100%", background:"linear-gradient(90deg,#6366f1,#ec4899)", borderRadius:8, transition:"width 0.2s" }}/>
             </div>
-            <div style={{ color:dm?"#888":"#606060", fontSize:13 }}>{Math.floor(progress)}%</div>
+            <div style={{ color:dm?"#888":"#606060", fontSize:14 }}>{Math.floor(progress)}%</div>
           </div>
         </div>
       )}
       {stage==="done"&&(
-        <div style={{ textAlign:"center", padding:"50px 20px" }}>
-          <div style={{ width:72, height:72, borderRadius:"50%", background:"rgba(16,185,129,0.2)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 20px", border:"2px solid rgba(16,185,129,0.4)" }}>
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="#10b981"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+        <div style={{ textAlign:"center", padding:"60px 20px" }}>
+          <div style={{ width:80, height:80, borderRadius:"50%", background:"rgba(16,185,129,0.2)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 24px", border:"2px solid rgba(16,185,129,0.4)" }}>
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="#10b981"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
           </div>
-          <h3 style={{ color:tp, marginBottom:6, fontSize:20 }}>Video Published! 🎉</h3>
-          <button onClick={()=>{setStage("select");setProgress(0);setTitle("");setDesc("");}} style={{ padding:"11px 24px", background:"#6366f1", border:"none", borderRadius:24, color:"#fff", fontSize:13, fontWeight:600, cursor:"pointer", marginTop:14 }}>Upload Another</button>
+          <h3 style={{ color:tp, marginBottom:8, fontSize:22 }}>Video Published! 🎉</h3>
+          <button onClick={()=>{setStage("select");setProgress(0);setTitle("");setDesc("");}} style={{ padding:"12px 28px", background:"#6366f1", border:"none", borderRadius:24, color:"#fff", fontSize:14, fontWeight:600, cursor:"pointer", marginTop:16 }}>Upload Another</button>
         </div>
       )}
     </div>
@@ -855,19 +857,19 @@ const LoginPage = ({ onLogin, dm, onBack }) => {
   };
 
   return (
-    <div style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center", background:bg, padding:16, minWidth:0 }}>
-      <div style={{ width:"100%", maxWidth:400 }}>
-        <div style={{ textAlign:"center", marginBottom:28 }}>
-          <div style={{ display:"inline-flex", alignItems:"center", gap:8, marginBottom:10 }}>
-            <div style={{ width:36, height:36, borderRadius:10, background:"linear-gradient(135deg,#6366f1,#ec4899)", display:"flex", alignItems:"center", justifyContent:"center" }}><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div>
-            <span style={{ fontSize:22, fontWeight:800, color:tp }}>video<span style={{ color:"#6366f1" }}>tube</span></span>
+    <div style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center", background:bg, padding:20 }}>
+      <div style={{ width:"100%", maxWidth:420 }}>
+        <div style={{ textAlign:"center", marginBottom:32 }}>
+          <div style={{ display:"inline-flex", alignItems:"center", gap:8, marginBottom:12 }}>
+            <div style={{ width:40, height:40, borderRadius:10, background:"linear-gradient(135deg,#6366f1,#ec4899)", display:"flex", alignItems:"center", justifyContent:"center" }}><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div>
+            <span style={{ fontSize:24, fontWeight:800, color:tp }}>video<span style={{ color:"#6366f1" }}>tube</span></span>
           </div>
-          <div style={{ color:ts, fontSize:13 }}>{isLogin?"Sign in to your account":"Create your free account"}</div>
+          <div style={{ color:ts, fontSize:14 }}>{isLogin?"Sign in to your account":"Create your free account"}</div>
         </div>
-        <div style={{ background:cb, borderRadius:20, padding:24, border:dm?"1px solid rgba(255,255,255,0.07)":"1px solid #e0e0e0", boxShadow:dm?"0 20px 60px rgba(0,0,0,0.4)":"0 8px 30px rgba(0,0,0,0.08)" }}>
+        <div style={{ background:cb, borderRadius:20, padding:32, border:dm?"1px solid rgba(255,255,255,0.07)":"1px solid #e0e0e0", boxShadow:dm?"0 20px 60px rgba(0,0,0,0.4)":"0 8px 30px rgba(0,0,0,0.08)" }}>
           <button onClick={()=>onLogin({name:"Demo User",email:"demo@videotube.com",avatar:"DU"})}
-            style={{ width:"100%", padding:11, background:ib, border:`1px solid ${ibdr}`, borderRadius:12, color:tp, fontSize:13, fontWeight:600, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", gap:10, marginBottom:18 }}>
-            <svg width="16" height="16" viewBox="0 0 24 24">
+            style={{ width:"100%", padding:12, background:ib, border:`1px solid ${ibdr}`, borderRadius:12, color:tp, fontSize:14, fontWeight:600, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", gap:10, marginBottom:20 }}>
+            <svg width="18" height="18" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
               <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
               <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
@@ -875,26 +877,29 @@ const LoginPage = ({ onLogin, dm, onBack }) => {
             </svg>
             Continue with Google (Demo)
           </button>
-          <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:18 }}>
+          <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:20 }}>
             <div style={{ flex:1, height:1, background:ibdr }}/><span style={{ color:ts, fontSize:12 }}>or</span><div style={{ flex:1, height:1, background:ibdr }}/>
           </div>
-          {err&&<div style={{ background:"rgba(239,68,68,0.1)", border:"1px solid rgba(239,68,68,0.3)", color:"#ef4444", padding:"9px 12px", borderRadius:10, fontSize:13, marginBottom:14 }}>{err}</div>}
-          {!isLogin&&<div style={{ marginBottom:12 }}><label style={{ display:"block", color:ts, fontSize:12, marginBottom:5, fontWeight:500 }}>Full Name</label><input value={name} onChange={e=>{setName(e.target.value);setErr("");}} placeholder="John Doe" style={{ width:"100%", background:ib, border:`1px solid ${ibdr}`, borderRadius:10, padding:"10px 13px", color:tp, fontSize:13, outline:"none", boxSizing:"border-box" }}/></div>}
-          <div style={{ marginBottom:12 }}><label style={{ display:"block", color:ts, fontSize:12, marginBottom:5, fontWeight:500 }}>Email</label><input value={email} onChange={e=>{setEmail(e.target.value);setErr("");}} type="email" placeholder="you@example.com" style={{ width:"100%", background:ib, border:`1px solid ${ibdr}`, borderRadius:10, padding:"10px 13px", color:tp, fontSize:13, outline:"none", boxSizing:"border-box" }}/></div>
-          <div style={{ marginBottom:18 }}><label style={{ display:"block", color:ts, fontSize:12, marginBottom:5, fontWeight:500 }}>Password</label><input value={pass} onChange={e=>{setPass(e.target.value);setErr("");}} type="password" placeholder="••••••••" onKeyDown={e=>e.key==="Enter"&&handle()} style={{ width:"100%", background:ib, border:`1px solid ${ibdr}`, borderRadius:10, padding:"10px 13px", color:tp, fontSize:13, outline:"none", boxSizing:"border-box" }}/></div>
-          <button onClick={handle} style={{ width:"100%", padding:12, background:"linear-gradient(135deg,#6366f1,#8b5cf6)", border:"none", borderRadius:12, color:"#fff", fontSize:14, fontWeight:700, cursor:"pointer" }}>{isLogin?"Sign In":"Create Account"}</button>
-          <div style={{ textAlign:"center", marginTop:14, color:ts, fontSize:13 }}>
+          {err&&<div style={{ background:"rgba(239,68,68,0.1)", border:"1px solid rgba(239,68,68,0.3)", color:"#ef4444", padding:"10px 14px", borderRadius:10, fontSize:13, marginBottom:16 }}>{err}</div>}
+          {!isLogin&&<div style={{ marginBottom:14 }}><label style={{ display:"block", color:ts, fontSize:12, marginBottom:6, fontWeight:500 }}>Full Name</label><input value={name} onChange={e=>{setName(e.target.value);setErr("");}} placeholder="John Doe" style={{ width:"100%", background:ib, border:`1px solid ${ibdr}`, borderRadius:10, padding:"11px 14px", color:tp, fontSize:14, outline:"none", boxSizing:"border-box" }}/></div>}
+          <div style={{ marginBottom:14 }}><label style={{ display:"block", color:ts, fontSize:12, marginBottom:6, fontWeight:500 }}>Email</label><input value={email} onChange={e=>{setEmail(e.target.value);setErr("");}} type="email" placeholder="you@example.com" style={{ width:"100%", background:ib, border:`1px solid ${ibdr}`, borderRadius:10, padding:"11px 14px", color:tp, fontSize:14, outline:"none", boxSizing:"border-box" }}/></div>
+          <div style={{ marginBottom:20 }}><label style={{ display:"block", color:ts, fontSize:12, marginBottom:6, fontWeight:500 }}>Password</label><input value={pass} onChange={e=>{setPass(e.target.value);setErr("");}} type="password" placeholder="••••••••" onKeyDown={e=>e.key==="Enter"&&handle()} style={{ width:"100%", background:ib, border:`1px solid ${ibdr}`, borderRadius:10, padding:"11px 14px", color:tp, fontSize:14, outline:"none", boxSizing:"border-box" }}/></div>
+          <button onClick={handle} style={{ width:"100%", padding:13, background:"linear-gradient(135deg,#6366f1,#8b5cf6)", border:"none", borderRadius:12, color:"#fff", fontSize:15, fontWeight:700, cursor:"pointer" }}>{isLogin?"Sign In":"Create Account"}</button>
+          <div style={{ textAlign:"center", marginTop:16, color:ts, fontSize:13 }}>
             {isLogin?"Don't have an account? ":"Already have an account? "}
             <button onClick={()=>{setIsLogin(l=>!l);setErr("");}} style={{ background:"none", border:"none", color:"#6366f1", cursor:"pointer", fontSize:13, fontWeight:600 }}>{isLogin?"Sign up":"Sign in"}</button>
           </div>
-          <button onClick={onBack} style={{ display:"block", margin:"10px auto 0", background:"none", border:"none", color:ts, cursor:"pointer", fontSize:13 }}>← Back to VideoTube</button>
+          <button onClick={onBack} style={{ display:"block", margin:"12px auto 0", background:"none", border:"none", color:ts, cursor:"pointer", fontSize:13 }}>← Back to VideoTube</button>
         </div>
       </div>
     </div>
   );
 };
 
+
+// ============================================================
 // ANALYTICS DASHBOARD
+// ============================================================
 const AnalyticsPage = ({ dm, history }) => {
   const bg=dm?"#0a0a14":"#f9f9f9", tp=dm?"#f0f0f0":"#0f0f0f", ts=dm?"#8a8a9a":"#606060", cb=dm?"#141420":"#fff", bdr=dm?"rgba(255,255,255,0.07)":"#e0e0e0";
   const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
@@ -907,55 +912,131 @@ const AnalyticsPage = ({ dm, history }) => {
     {l:"Watch Time",v:"142K hrs",ch:"+23.1%",up:true,icon:"⏱"},
     {l:"Revenue",v:"$3,240",ch:"-2.4%",up:false,icon:"💰"},
   ];
+  const topVideos = (history||[]).slice(0,5).map((v,i)=>({
+    title: v.snippet?.title||"Unknown", views: fmtViews(v.statistics?.viewCount||Math.floor(Math.random()*500000+10000)),
+    likes: fmtViews(v.statistics?.likeCount||Math.floor(Math.random()*20000+500)), ctr:`${(Math.random()*8+2).toFixed(1)}%`
+  }));
 
   return (
-    <div style={{ flex:1, overflowY:"auto", overflowX:"hidden", padding:"16px 12px 80px", background:bg, minWidth:0 }}>
-      <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:24, flexWrap:"wrap" }}>
-        <div style={{ width:4, height:26, background:"linear-gradient(180deg,#6366f1,#ec4899)", borderRadius:2 }}/>
-        <h2 style={{ color:tp, fontSize:20, fontWeight:700, margin:0 }}>📊 Creator Analytics</h2>
-        <div style={{ marginLeft:"auto", padding:"5px 12px", background:"rgba(99,102,241,0.15)", border:"1px solid rgba(99,102,241,0.3)", borderRadius:20, fontSize:11, color:"#8b8cf8", fontWeight:600 }}>Last 28 days</div>
+    <div style={{ flex:1, overflowY:"auto", padding:"24px 28px 80px", background:bg }}>
+      <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:28 }}>
+        <div style={{ width:4, height:28, background:"linear-gradient(180deg,#6366f1,#ec4899)", borderRadius:2 }}/>
+        <h2 style={{ color:tp, fontSize:22, fontWeight:700, margin:0 }}>📊 Creator Analytics</h2>
+        <div style={{ marginLeft:"auto", padding:"6px 14px", background:"rgba(99,102,241,0.15)", border:"1px solid rgba(99,102,241,0.3)", borderRadius:20, fontSize:12, color:"#8b8cf8", fontWeight:600 }}>Last 28 days</div>
       </div>
-      <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(160px,1fr))", gap:12, marginBottom:24 }}>
+
+      {/* Stats Cards */}
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))", gap:16, marginBottom:28 }}>
         {stats.map(s=>(
-          <div key={s.l} style={{ background:cb, borderRadius:14, padding:"16px", border:`1px solid ${bdr}` }}>
-            <div style={{ fontSize:22, marginBottom:6 }}>{s.icon}</div>
-            <div style={{ fontSize:20, fontWeight:800, color:tp, marginBottom:3 }}>{s.v}</div>
-            <div style={{ fontSize:12, color:ts, marginBottom:6 }}>{s.l}</div>
-            <div style={{ fontSize:11, fontWeight:600, color:s.up?"#10b981":"#ef4444" }}>{s.up?"↑":"↓"} {s.ch}</div>
+          <div key={s.l} style={{ background:cb, borderRadius:16, padding:"20px", border:`1px solid ${bdr}` }}>
+            <div style={{ fontSize:24, marginBottom:8 }}>{s.icon}</div>
+            <div style={{ fontSize:24, fontWeight:800, color:tp, marginBottom:4 }}>{s.v}</div>
+            <div style={{ fontSize:13, color:ts, marginBottom:8 }}>{s.l}</div>
+            <div style={{ fontSize:12, fontWeight:600, color:s.up?"#10b981":"#ef4444" }}>{s.up?"↑":"↓"} {s.ch} vs last period</div>
           </div>
         ))}
       </div>
-      <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))", gap:16, marginBottom:24 }}>
-        <div style={{ background:cb, borderRadius:14, padding:20, border:`1px solid ${bdr}` }}>
-          <div style={{ fontSize:14, fontWeight:700, color:tp, marginBottom:16 }}>Views This Week</div>
-          <div style={{ display:"flex", alignItems:"flex-end", gap:6, height:100 }}>
+
+      {/* Charts Row */}
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:20, marginBottom:28 }}>
+        {/* Views Chart */}
+        <div style={{ background:cb, borderRadius:16, padding:24, border:`1px solid ${bdr}` }}>
+          <div style={{ fontSize:15, fontWeight:700, color:tp, marginBottom:20 }}>Views This Week</div>
+          <div style={{ display:"flex", alignItems:"flex-end", gap:8, height:120 }}>
             {viewData.map((v,i)=>(
-              <div key={i} style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", gap:4 }}>
-                <div style={{ fontSize:8, color:ts }}>{fmtViews(v)}</div>
-                <div style={{ width:"100%", background:"linear-gradient(180deg,#6366f1,#8b5cf6)", borderRadius:"3px 3px 0 0", height:`${(v/maxV)*80}px`, minHeight:3 }}/>
-                <div style={{ fontSize:9, color:ts }}>{days[i]}</div>
+              <div key={i} style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", gap:6 }}>
+                <div style={{ fontSize:9, color:ts }}>{fmtViews(v)}</div>
+                <div style={{ width:"100%", background:"linear-gradient(180deg,#6366f1,#8b5cf6)", borderRadius:"4px 4px 0 0", height:`${(v/maxV)*90}px`, transition:"height 0.5s", minHeight:4 }}/>
+                <div style={{ fontSize:10, color:ts }}>{days[i]}</div>
               </div>
             ))}
           </div>
         </div>
-        <div style={{ background:cb, borderRadius:14, padding:20, border:`1px solid ${bdr}` }}>
-          <div style={{ fontSize:14, fontWeight:700, color:tp, marginBottom:16 }}>New Subscribers</div>
-          <div style={{ display:"flex", alignItems:"flex-end", gap:6, height:100 }}>
+
+        {/* Subscribers Chart */}
+        <div style={{ background:cb, borderRadius:16, padding:24, border:`1px solid ${bdr}` }}>
+          <div style={{ fontSize:15, fontWeight:700, color:tp, marginBottom:20 }}>New Subscribers</div>
+          <div style={{ display:"flex", alignItems:"flex-end", gap:8, height:120 }}>
             {subData.map((v,i)=>(
-              <div key={i} style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", gap:4 }}>
-                <div style={{ fontSize:8, color:ts }}>{v}</div>
-                <div style={{ width:"100%", background:"linear-gradient(180deg,#ec4899,#f97316)", borderRadius:"3px 3px 0 0", height:`${(v/maxS)*80}px`, minHeight:3 }}/>
-                <div style={{ fontSize:9, color:ts }}>{days[i]}</div>
+              <div key={i} style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", gap:6 }}>
+                <div style={{ fontSize:9, color:ts }}>{v}</div>
+                <div style={{ width:"100%", background:"linear-gradient(180deg,#ec4899,#f97316)", borderRadius:"4px 4px 0 0", height:`${(v/maxS)*90}px`, transition:"height 0.5s", minHeight:4 }}/>
+                <div style={{ fontSize:10, color:ts }}>{days[i]}</div>
               </div>
             ))}
           </div>
         </div>
       </div>
+
+      {/* Audience Metrics */}
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:20, marginBottom:28 }}>
+        <div style={{ background:cb, borderRadius:16, padding:24, border:`1px solid ${bdr}` }}>
+          <div style={{ fontSize:15, fontWeight:700, color:tp, marginBottom:16 }}>Audience Demographics</div>
+          {[["18-24","32%",0.32],["25-34","41%",0.41],["35-44","18%",0.18],["45+","9%",0.09]].map(([age,pct,val])=>(
+            <div key={age} style={{ marginBottom:12 }}>
+              <div style={{ display:"flex", justifyContent:"space-between", marginBottom:4 }}>
+                <span style={{ color:ts, fontSize:13 }}>{age}</span><span style={{ color:tp, fontSize:13, fontWeight:600 }}>{pct}</span>
+              </div>
+              <div style={{ height:6, background:dm?"rgba(255,255,255,0.07)":"#e0e0e0", borderRadius:3, overflow:"hidden" }}>
+                <div style={{ height:"100%", width:`${val*100}%`, background:"linear-gradient(90deg,#6366f1,#ec4899)", borderRadius:3 }}/>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div style={{ background:cb, borderRadius:16, padding:24, border:`1px solid ${bdr}` }}>
+          <div style={{ fontSize:15, fontWeight:700, color:tp, marginBottom:16 }}>Traffic Sources</div>
+          {[["YouTube Search","45%",0.45,"#6366f1"],["Suggested Videos","28%",0.28,"#ec4899"],["Direct/External","15%",0.15,"#f59e0b"],["Browse Features","12%",0.12,"#10b981"]].map(([src,pct,val,color])=>(
+            <div key={src} style={{ display:"flex", alignItems:"center", gap:12, marginBottom:12 }}>
+              <div style={{ width:10, height:10, borderRadius:"50%", background:color, flexShrink:0 }}/>
+              <div style={{ flex:1 }}>
+                <div style={{ display:"flex", justifyContent:"space-between", marginBottom:3 }}>
+                  <span style={{ color:ts, fontSize:12 }}>{src}</span><span style={{ color:tp, fontSize:12, fontWeight:600 }}>{pct}</span>
+                </div>
+                <div style={{ height:4, background:dm?"rgba(255,255,255,0.07)":"#e0e0e0", borderRadius:2, overflow:"hidden" }}>
+                  <div style={{ height:"100%", width:`${val*100}%`, background:color, borderRadius:2 }}/>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Top Videos Table */}
+      {topVideos.length>0&&(
+        <div style={{ background:cb, borderRadius:16, padding:24, border:`1px solid ${bdr}` }}>
+          <div style={{ fontSize:15, fontWeight:700, color:tp, marginBottom:16 }}>Top Performing Videos</div>
+          <div style={{ overflowX:"auto" }}>
+            <table style={{ width:"100%", borderCollapse:"collapse" }}>
+              <thead>
+                <tr>
+                  {["Video","Views","Likes","CTR"].map(h=>(
+                    <th key={h} style={{ textAlign:"left", padding:"8px 12px", fontSize:12, color:ts, fontWeight:600, textTransform:"uppercase", letterSpacing:"0.06em", borderBottom:`1px solid ${bdr}` }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {topVideos.map((v,i)=>(
+                  <tr key={i}>
+                    <td style={{ padding:"12px", fontSize:13, color:tp, borderBottom:`1px solid ${bdr}`, maxWidth:300 }}>
+                      <div style={{ overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{v.title}</div>
+                    </td>
+                    <td style={{ padding:"12px", fontSize:13, color:ts, borderBottom:`1px solid ${bdr}` }}>{v.views}</td>
+                    <td style={{ padding:"12px", fontSize:13, color:ts, borderBottom:`1px solid ${bdr}` }}>{v.likes}</td>
+                    <td style={{ padding:"12px", fontSize:13, color:"#10b981", fontWeight:600, borderBottom:`1px solid ${bdr}` }}>{v.ctr}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
+// ============================================================
 // PLAYLISTS PAGE
+// ============================================================
 const PlaylistsPage = ({ playlists, setPlaylists, onVideoClick, dm }) => {
   const [showCreate, setShowCreate] = useState(false);
   const [newName, setNewName] = useState("");
@@ -984,50 +1065,57 @@ const PlaylistsPage = ({ playlists, setPlaylists, onVideoClick, dm }) => {
   const openedPl = playlists.find(p=>p.id===openPl);
 
   return (
-    <div style={{ flex:1, overflowY:"auto", overflowX:"hidden", padding:"16px 12px 80px", background:bg, minWidth:0 }}>
-      <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:20 }}>
-        <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-          <div style={{ width:4, height:26, background:"linear-gradient(180deg,#6366f1,#ec4899)", borderRadius:2 }}/>
-          <h2 style={{ color:tp, fontSize:20, fontWeight:700, margin:0 }}>📋 Playlists</h2>
+    <div style={{ flex:1, overflowY:"auto", padding:"24px 28px 80px", background:bg }}>
+      <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:24 }}>
+        <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+          <div style={{ width:4, height:28, background:"linear-gradient(180deg,#6366f1,#ec4899)", borderRadius:2 }}/>
+          <h2 style={{ color:tp, fontSize:22, fontWeight:700, margin:0 }}>📋 Playlists</h2>
         </div>
-        <button onClick={()=>setShowCreate(true)} style={{ padding:"9px 18px", background:"#6366f1", border:"none", borderRadius:24, color:"#fff", fontSize:13, fontWeight:600, cursor:"pointer" }}>+ New</button>
+        <button onClick={()=>setShowCreate(true)} style={{ padding:"10px 20px", background:"#6366f1", border:"none", borderRadius:24, color:"#fff", fontSize:13, fontWeight:600, cursor:"pointer", display:"flex", alignItems:"center", gap:6 }}>
+          + New Playlist
+        </button>
       </div>
+
       {showCreate&&(
-        <div style={{ background:cb, borderRadius:14, padding:20, border:`1px solid ${bdr}`, marginBottom:20 }}>
+        <div style={{ background:cb, borderRadius:16, padding:24, border:`1px solid ${bdr}`, marginBottom:24 }}>
+          <div style={{ fontSize:15, fontWeight:700, color:tp, marginBottom:16 }}>Create New Playlist</div>
           <input value={newName} onChange={e=>setNewName(e.target.value)} onKeyDown={e=>e.key==="Enter"&&createPlaylist()} placeholder="Playlist name..."
-            style={{ width:"100%", background:ib, border:`1px solid ${ibdr}`, borderRadius:10, padding:"10px 13px", color:tp, fontSize:13, outline:"none", boxSizing:"border-box", marginBottom:10 }}/>
-          <div style={{ display:"flex", gap:8 }}>
-            <button onClick={createPlaylist} style={{ padding:"9px 20px", background:"#6366f1", border:"none", borderRadius:20, color:"#fff", fontSize:13, fontWeight:600, cursor:"pointer" }}>Create</button>
-            <button onClick={()=>{setShowCreate(false);setNewName("");}} style={{ padding:"9px 16px", background:"transparent", border:`1px solid ${ibdr}`, borderRadius:20, color:ts, fontSize:13, cursor:"pointer" }}>Cancel</button>
+            style={{ width:"100%", background:ib, border:`1px solid ${ibdr}`, borderRadius:10, padding:"11px 14px", color:tp, fontSize:14, outline:"none", boxSizing:"border-box", marginBottom:12 }}/>
+          <div style={{ display:"flex", gap:10 }}>
+            <button onClick={createPlaylist} style={{ padding:"10px 24px", background:"#6366f1", border:"none", borderRadius:20, color:"#fff", fontSize:13, fontWeight:600, cursor:"pointer" }}>Create</button>
+            <button onClick={()=>{setShowCreate(false);setNewName("");}} style={{ padding:"10px 20px", background:"transparent", border:`1px solid ${ibdr}`, borderRadius:20, color:ts, fontSize:13, cursor:"pointer" }}>Cancel</button>
           </div>
         </div>
       )}
+
       {playlists.length===0?(
-        <div style={{ textAlign:"center", padding:"60px 20px" }}>
-          <div style={{ fontSize:44, marginBottom:14 }}>📋</div>
-          <div style={{ color:tp, fontSize:16, fontWeight:600, marginBottom:6 }}>No playlists yet</div>
+        <div style={{ textAlign:"center", padding:"80px 20px" }}>
+          <div style={{ fontSize:48, marginBottom:16 }}>📋</div>
+          <div style={{ color:tp, fontSize:18, fontWeight:600, marginBottom:8 }}>No playlists yet</div>
+          <div style={{ color:ts, fontSize:14, marginBottom:24 }}>Create a playlist to organize your videos</div>
+          <button onClick={()=>setShowCreate(true)} style={{ padding:"12px 28px", background:"#6366f1", border:"none", borderRadius:24, color:"#fff", fontSize:14, fontWeight:600, cursor:"pointer" }}>Create Playlist</button>
         </div>
       ):(
         openedPl?(
           <div>
-            <button onClick={()=>setOpenPl(null)} style={{ background:"none", border:"none", color:"#6366f1", cursor:"pointer", fontSize:13, fontWeight:600, marginBottom:14 }}>← Back</button>
-            <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:16 }}>
+            <button onClick={()=>setOpenPl(null)} style={{ background:"none", border:"none", color:"#6366f1", cursor:"pointer", fontSize:14, fontWeight:600, marginBottom:16, display:"flex", alignItems:"center", gap:6 }}>← Back to Playlists</button>
+            <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:20 }}>
               <div>
-                <div style={{ fontSize:18, fontWeight:700, color:tp }}>{openedPl.name}</div>
-                <div style={{ fontSize:12, color:ts }}>{openedPl.videos.length} videos</div>
+                <div style={{ fontSize:20, fontWeight:700, color:tp }}>{openedPl.name}</div>
+                <div style={{ fontSize:13, color:ts }}>{openedPl.videos.length} videos</div>
               </div>
-              <button onClick={()=>deletePlaylist(openedPl.id)} style={{ background:"rgba(239,68,68,0.1)", border:"1px solid rgba(239,68,68,0.3)", color:"#ef4444", padding:"7px 14px", borderRadius:20, cursor:"pointer", fontSize:12 }}>Delete</button>
+              <button onClick={()=>deletePlaylist(openedPl.id)} style={{ background:"rgba(239,68,68,0.1)", border:"1px solid rgba(239,68,68,0.3)", color:"#ef4444", padding:"8px 16px", borderRadius:20, cursor:"pointer", fontSize:13 }}>Delete Playlist</button>
             </div>
             {openedPl.videos.length===0?(
-              <div style={{ textAlign:"center", padding:"36px", color:ts, fontSize:13 }}>No videos in this playlist.</div>
+              <div style={{ textAlign:"center", padding:"40px", color:ts }}>No videos in this playlist yet. Like or save videos to add them.</div>
             ):(
-              <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(240px,1fr))", gap:16 }}>
+              <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))", gap:20 }}>
                 {openedPl.videos.map(v=>{
                   const vid=v.id?.videoId||v.id;
                   return (
                     <div key={vid} style={{ position:"relative" }}>
                       <VideoCard video={v} onClick={onVideoClick} dm={dm} onCh={()=>{}}/>
-                      <button onClick={()=>removeFromPlaylist(openedPl.id,vid)} style={{ position:"absolute", top:8, right:8, background:"rgba(0,0,0,0.7)", border:"none", color:"#fff", borderRadius:"50%", width:26, height:26, cursor:"pointer", fontSize:13, display:"flex", alignItems:"center", justifyContent:"center" }}>✕</button>
+                      <button onClick={()=>removeFromPlaylist(openedPl.id,vid)} style={{ position:"absolute", top:8, right:8, background:"rgba(0,0,0,0.7)", border:"none", color:"#fff", borderRadius:"50%", width:28, height:28, cursor:"pointer", fontSize:14, display:"flex", alignItems:"center", justifyContent:"center" }}>✕</button>
                     </div>
                   );
                 })}
@@ -1035,20 +1123,20 @@ const PlaylistsPage = ({ playlists, setPlaylists, onVideoClick, dm }) => {
             )}
           </div>
         ):(
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(220px,1fr))", gap:16 }}>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:20 }}>
             {playlists.map(pl=>(
-              <div key={pl.id} onClick={()=>setOpenPl(pl.id)} style={{ background:cb, borderRadius:14, overflow:"hidden", border:`1px solid ${bdr}`, cursor:"pointer", transition:"transform 0.2s" }}
+              <div key={pl.id} onClick={()=>setOpenPl(pl.id)} style={{ background:cb, borderRadius:16, overflow:"hidden", border:`1px solid ${bdr}`, cursor:"pointer", transition:"transform 0.2s" }}
                 onMouseEnter={e=>e.currentTarget.style.transform="translateY(-2px)"}
                 onMouseLeave={e=>e.currentTarget.style.transform="translateY(0)"}>
-                <div style={{ height:120, background:`linear-gradient(135deg,${["#6366f1","#ec4899","#f59e0b","#10b981"][playlists.indexOf(pl)%4]}33,#0a0a1a)`, display:"flex", alignItems:"center", justifyContent:"center", position:"relative" }}>
+                <div style={{ height:140, background:`linear-gradient(135deg,${["#6366f1","#ec4899","#f59e0b","#10b981"][playlists.indexOf(pl)%4]}33,#0a0a1a)`, display:"flex", alignItems:"center", justifyContent:"center", position:"relative" }}>
                   {pl.videos[0]?.snippet?.thumbnails?.medium?.url
                     ? <img src={pl.videos[0].snippet.thumbnails.medium.url} alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }}/>
-                    : <div style={{ fontSize:36 }}>📋</div>}
-                  <div style={{ position:"absolute", bottom:6, right:6, background:"rgba(0,0,0,0.8)", color:"#fff", fontSize:10, padding:"2px 7px", borderRadius:4 }}>{pl.videos.length} videos</div>
+                    : <div style={{ fontSize:40 }}>📋</div>}
+                  <div style={{ position:"absolute", bottom:8, right:8, background:"rgba(0,0,0,0.8)", color:"#fff", fontSize:11, padding:"2px 8px", borderRadius:4 }}>{pl.videos.length} videos</div>
                 </div>
-                <div style={{ padding:"12px 14px" }}>
-                  <div style={{ fontSize:14, fontWeight:700, color:tp, marginBottom:3 }}>{pl.name}</div>
-                  <div style={{ fontSize:11, color:ts }}>Created {fmtDate(pl.createdAt)}</div>
+                <div style={{ padding:"14px 16px" }}>
+                  <div style={{ fontSize:15, fontWeight:700, color:tp, marginBottom:4 }}>{pl.name}</div>
+                  <div style={{ fontSize:12, color:ts }}>Created {fmtDate(pl.createdAt)}</div>
                 </div>
               </div>
             ))}
@@ -1060,161 +1148,126 @@ const PlaylistsPage = ({ playlists, setPlaylists, onVideoClick, dm }) => {
 };
 
 // ============================================================
-// SHORTS PAGE — Fixed: snap scroll, keyboard nav, no overflow
+// SHORTS PAGE  -- one video per screen, arrow keys + swipe
 // ============================================================
-const ShortsPage = ({ dm, onVideoClick, onBack }) => {
-  const [videos, setVideos] = useState([]);
+const ShortsPage = ({ dm }) => {
+  const [videos, setVideos]   = useState([]);
   const [loading, setLoading] = useState(true);
   const [current, setCurrent] = useState(0);
-  const containerRef = useRef(null);
-  const isScrolling = useRef(false);
+  const itemRefs = useRef([]);
 
   useEffect(()=>{
-    if (!API_KEY) { setLoading(false); return; }
-    ytFetch(`${YT_BASE}/search?part=snippet&q=shorts+vertical+video+60seconds&type=video&maxResults=20&videoDuration=short&key=${API_KEY}`)
+    if (!API_KEY){ setLoading(false); return; }
+    ytFetch(`${YT_BASE}/search?part=snippet&q=shorts+viral+trending+2024&type=video&maxResults=20&videoDuration=short&key=${API_KEY}`)
       .then(async data=>{
         const ids=(data.items||[]).map(i=>i.id?.videoId).filter(Boolean);
-        if (!ids.length){setLoading(false);return;}
-        const det=await getDetails(ids).catch(()=>[]);
+        if(!ids.length){ setLoading(false); return; }
+        const det = await getDetails(ids).catch(()=>[]);
         setVideos(det); setLoading(false);
       }).catch(()=>setLoading(false));
   },[]);
 
-  // Programmatic scroll to index
-  const scrollTo = useCallback((idx) => {
-    if (!containerRef.current) return;
-    const el = containerRef.current;
-    el.scrollTo({ top: idx * el.clientHeight, behavior: "smooth" });
+  const goTo = (idx)=>{
+    if(idx < 0 || idx >= videos.length) return;
     setCurrent(idx);
-  }, []);
+    itemRefs.current[idx]?.scrollIntoView({ behavior:"smooth", block:"start" });
+  };
 
-  // Keyboard navigation
-  useEffect(() => {
-    const handler = (e) => {
-      if (e.key === "ArrowDown" || e.key === "ArrowRight") {
-        e.preventDefault();
-        setCurrent(c => { const n = Math.min(c+1, videos.length-1); scrollTo(n); return n; });
-      }
-      if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
-        e.preventDefault();
-        setCurrent(c => { const n = Math.max(c-1, 0); scrollTo(n); return n; });
-      }
+  useEffect(()=>{
+    const handler=(e)=>{
+      if(e.key==="ArrowDown"){ e.preventDefault(); goTo(Math.min(current+1, videos.length-1)); }
+      if(e.key==="ArrowUp")  { e.preventDefault(); goTo(Math.max(current-1, 0)); }
     };
     window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [videos.length, scrollTo]);
+    return ()=>window.removeEventListener("keydown", handler);
+  },[current, videos.length]);
 
-  // Detect scroll-snap position
-  const handleScroll = useCallback(() => {
-    if (!containerRef.current || isScrolling.current) return;
-    const el = containerRef.current;
-    const idx = Math.round(el.scrollTop / el.clientHeight);
-    setCurrent(idx);
-  }, []);
-
-  const tp=dm?"#f0f0f0":"#0f0f0f", ts=dm?"#8a8a9a":"#606060";
+  useEffect(()=>{
+    if(!videos.length) return;
+    const obs = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting) setCurrent(parseInt(e.target.dataset.idx||"0",10)); });
+    },{ threshold:0.55 });
+    itemRefs.current.forEach(el=>{ if(el) obs.observe(el); });
+    return ()=>obs.disconnect();
+  },[videos.length]);
 
   return (
-    <div style={{ position:"fixed", inset:0, background:"#000", zIndex:200, display:"flex", flexDirection:"column" }}>
-      {/* Header */}
-      <div style={{ position:"absolute", top:0, left:0, right:0, zIndex:10, display:"flex", alignItems:"center", gap:12, padding:"12px 16px", background:"linear-gradient(to bottom, rgba(0,0,0,0.8), transparent)" }}>
-        <button onClick={onBack} style={{ background:"rgba(255,255,255,0.15)", border:"none", color:"#fff", width:36, height:36, borderRadius:"50%", cursor:"pointer", fontSize:18, display:"flex", alignItems:"center", justifyContent:"center" }}>←</button>
-        <span style={{ color:"#fff", fontWeight:700, fontSize:18 }}>🎬 Shorts</span>
-        <div style={{ marginLeft:"auto", color:"rgba(255,255,255,0.5)", fontSize:12 }}>{current+1} / {videos.length}</div>
+    <div style={{ flex:1, display:"flex", flexDirection:"column", background:"#000", overflow:"hidden" }}>
+      <div style={{ flexShrink:0, display:"flex", alignItems:"center", gap:10, padding:"9px 14px", background:"rgba(0,0,0,0.95)", borderBottom:"1px solid rgba(255,255,255,0.07)", zIndex:20 }}>
+        <span style={{ color:"#fff", fontWeight:800, fontSize:16, flex:1 }}>🎬 Shorts</span>
+        <span style={{ color:"rgba(255,255,255,0.3)", fontSize:11 }}>↑↓ keys or swipe</span>
+        <button onClick={()=>goTo(Math.max(current-1,0))} disabled={current===0}
+          style={{ width:32,height:32,borderRadius:"50%",background:current===0?"rgba(255,255,255,0.05)":"rgba(255,255,255,0.18)",border:"none",color:current===0?"rgba(255,255,255,0.2)":"#fff",cursor:current===0?"not-allowed":"pointer",fontSize:16 }}>↑</button>
+        <button onClick={()=>goTo(Math.min(current+1,videos.length-1))} disabled={current===videos.length-1}
+          style={{ width:32,height:32,borderRadius:"50%",background:current===videos.length-1?"rgba(255,255,255,0.05)":"rgba(255,255,255,0.18)",border:"none",color:current===videos.length-1?"rgba(255,255,255,0.2)":"#fff",cursor:current===videos.length-1?"not-allowed":"pointer",fontSize:16 }}>↓</button>
       </div>
-
-      {loading ? (
-        <div style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center" }}>
-          <div style={{ display:"flex", gap:8 }}>{[0,1,2].map(i=><div key={i} style={{ width:12, height:12, borderRadius:"50%", background:"#6366f1", animation:`bounce 0.6s ${i*0.15}s infinite alternate` }}/>)}</div>
+      {loading?(
+        <div style={{ flex:1,display:"flex",alignItems:"center",justifyContent:"center" }}>
+          <div style={{ display:"flex",gap:8 }}>{[0,1,2].map(i=><div key={i} style={{ width:12,height:12,borderRadius:"50%",background:"#6366f1",animation:`bounce 0.6s ${i*0.15}s infinite alternate` }}/>)}</div>
         </div>
-      ) : (
-        <>
-          {/* Scroll container */}
-          <div
-            ref={containerRef}
-            onScroll={handleScroll}
-            style={{ flex:1, overflowY:"scroll", scrollSnapType:"y mandatory", scrollbarWidth:"none", WebkitOverflowScrolling:"touch" }}
-          >
-            {videos.map((video, i) => {
-              const sn=video.snippet||{}, st=video.statistics||{};
-              const vid=video.id?.videoId||video.id;
-              const thumb=sn.thumbnails?.high?.url||sn.thumbnails?.medium?.url||"";
-              return (
-                <div
-                  key={vid}
-                  style={{ height:"100vh", scrollSnapAlign:"start", scrollSnapStop:"always", display:"flex", justifyContent:"center", alignItems:"center", background:"#000", position:"relative", overflow:"hidden" }}
-                >
-                  {/* Video player area */}
-                  <div style={{ position:"relative", height:"100%", width:"100%", maxWidth:420, background:"#111", margin:"0 auto" }}>
-                    {/* Thumbnail shown when not active */}
-                    {thumb && i !== current && (
-                      <img src={thumb} alt="" style={{ width:"100%", height:"100%", objectFit:"cover", position:"absolute", inset:0 }}/>
-                    )}
-                    {/* Iframe only for current */}
-                    {i === current && (
-                      <iframe
-                        src={`https://www.youtube.com/embed/${vid}?autoplay=1&loop=1&mute=0&controls=1&rel=0&playsinline=1`}
-                        style={{ position:"absolute", inset:0, width:"100%", height:"100%", border:"none" }}
-                        allow="autoplay; fullscreen"
-                        title={sn.title}
-                      />
-                    )}
-
-                    {/* Side action buttons */}
-                    <div style={{ position:"absolute", right:8, bottom:100, display:"flex", flexDirection:"column", gap:18, alignItems:"center" }}>
-                      {[{ic:"👍",l:fmtViews(st.likeCount)},{ic:"💬",l:fmtViews(st.commentCount)},{ic:"↗",l:"Share"},{ic:"⊕",l:"Save"}].map(a=>(
-                        <div key={a.l} style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:3, cursor:"pointer" }}>
-                          <div style={{ width:42, height:42, borderRadius:"50%", background:"rgba(255,255,255,0.15)", backdropFilter:"blur(8px)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:18 }}>{a.ic}</div>
-                          <span style={{ color:"#fff", fontSize:10 }}>{a.l}</span>
-                        </div>
-                      ))}
+      ):(
+        <div style={{ flex:1,overflowY:"scroll",scrollSnapType:"y mandatory",scrollbarWidth:"none",WebkitOverflowScrolling:"touch" }}>
+          {videos.map((video,i)=>{
+            const sn=video.snippet||{}, st=video.statistics||{};
+            const vid=video.id?.videoId||video.id;
+            const thumb=sn.thumbnails?.high?.url||sn.thumbnails?.medium?.url||"";
+            const isActive=i===current;
+            return (
+              <div key={vid} data-idx={i} ref={el=>{ itemRefs.current[i]=el; }}
+                style={{ height:"calc(100vh - 110px)",minHeight:480,scrollSnapAlign:"start",scrollSnapStop:"always",display:"flex",justifyContent:"center",alignItems:"stretch",background:"#000",position:"relative",flexShrink:0 }}>
+                <div style={{ position:"relative",width:"100%",maxWidth:400,background:"#111",overflow:"hidden" }}>
+                  {thumb&&<img src={thumb} alt="" loading="lazy" style={{ position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",zIndex:1 }}/>}
+                  {isActive&&(
+                    <iframe key={vid}
+                      src={`https://www.youtube.com/embed/${vid}?autoplay=1&mute=0&loop=1&playlist=${vid}&controls=1&rel=0&playsinline=1`}
+                      style={{ position:"absolute",inset:0,width:"100%",height:"100%",border:"none",zIndex:2 }}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen title={sn.title}/>
+                  )}
+                  <div style={{ position:"absolute",bottom:0,left:0,right:0,height:220,background:"linear-gradient(transparent,rgba(0,0,0,0.88))",zIndex:3,pointerEvents:"none" }}/>
+                  <div style={{ position:"absolute",bottom:16,left:12,right:68,zIndex:4 }}>
+                    <div style={{ display:"flex",alignItems:"center",gap:8,marginBottom:8 }}>
+                      <div style={{ width:36,height:36,borderRadius:"50%",flexShrink:0,background:clr(sn.channelTitle),display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,color:"#fff",border:"2px solid rgba(255,255,255,0.5)" }}>{ini(sn.channelTitle)}</div>
+                      <span style={{ color:"#fff",fontSize:13,fontWeight:700,flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",textShadow:"0 1px 4px rgba(0,0,0,0.9)" }}>@{(sn.channelTitle||"").replace(/\s/g,"").toLowerCase()}</span>
                     </div>
-
-                    {/* Bottom info overlay */}
-                    <div style={{ position:"absolute", bottom:0, left:0, right:0, padding:"50px 14px 16px", background:"linear-gradient(transparent, rgba(0,0,0,0.85))", pointerEvents:"none" }}>
-                      <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:6, pointerEvents:"all" }}>
-                        <div style={{ width:30, height:30, borderRadius:"50%", background:clr(sn.channelTitle), display:"flex", alignItems:"center", justifyContent:"center", fontSize:10, fontWeight:700, color:"#fff", flexShrink:0 }}>{ini(sn.channelTitle)}</div>
-                        <span style={{ color:"#fff", fontSize:13, fontWeight:600 }}>@{(sn.channelTitle||"").replace(/\s/g,"").toLowerCase()}</span>
-                        <button style={{ marginLeft:6, padding:"3px 10px", background:"transparent", border:"1px solid rgba(255,255,255,0.7)", borderRadius:20, color:"#fff", fontSize:11, cursor:"pointer", pointerEvents:"all" }}>Subscribe</button>
-                      </div>
-                      <div style={{ color:"rgba(255,255,255,0.9)", fontSize:12, lineHeight:1.4, display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical", overflow:"hidden" }}>{sn.title}</div>
-                    </div>
+                    <div style={{ color:"rgba(255,255,255,0.92)",fontSize:13,lineHeight:1.5,display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical",overflow:"hidden",textShadow:"0 1px 4px rgba(0,0,0,0.9)" }}>{sn.title}</div>
+                    <button style={{ marginTop:8,padding:"5px 14px",background:"transparent",border:"1.5px solid rgba(255,255,255,0.85)",borderRadius:20,color:"#fff",fontSize:12,cursor:"pointer",fontWeight:700 }}>Subscribe</button>
                   </div>
-
-                  {/* Up / Down nav buttons — only on desktop */}
-                  <div style={{ position:"absolute", right:16, top:"50%", transform:"translateY(-50%)", display:"flex", flexDirection:"column", gap:10 }}>
-                    {i > 0 && (
-                      <button onClick={()=>scrollTo(i-1)} style={{ background:"rgba(255,255,255,0.15)", backdropFilter:"blur(8px)", border:"none", color:"#fff", width:40, height:40, borderRadius:"50%", cursor:"pointer", fontSize:16, display:"flex", alignItems:"center", justifyContent:"center" }}>↑</button>
-                    )}
-                    {i < videos.length-1 && (
-                      <button onClick={()=>scrollTo(i+1)} style={{ background:"rgba(255,255,255,0.15)", backdropFilter:"blur(8px)", border:"none", color:"#fff", width:40, height:40, borderRadius:"50%", cursor:"pointer", fontSize:16, display:"flex", alignItems:"center", justifyContent:"center" }}>↓</button>
-                    )}
+                  <div style={{ position:"absolute",right:8,bottom:100,zIndex:4,display:"flex",flexDirection:"column",gap:16,alignItems:"center" }}>
+                    {[{ic:"👍",l:fmtViews(st.likeCount)||"Like"},{ic:"💬",l:fmtViews(st.commentCount)||"0"},{ic:"↗",l:"Share"},{ic:"⊕",l:"Save"}].map(a=>(
+                      <div key={a.l} style={{ display:"flex",flexDirection:"column",alignItems:"center",gap:3,cursor:"pointer",transition:"transform 0.15s" }}
+                        onMouseEnter={e=>e.currentTarget.style.transform="scale(1.15)"}
+                        onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"}>
+                        <div style={{ width:46,height:46,borderRadius:"50%",background:"rgba(255,255,255,0.18)",backdropFilter:"blur(6px)",border:"1px solid rgba(255,255,255,0.12)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22 }}>{a.ic}</div>
+                        <span style={{ color:"#fff",fontSize:11,fontWeight:600,textShadow:"0 1px 3px rgba(0,0,0,0.8)" }}>{a.l}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              );
-            })}
-          </div>
-
-          {/* Bottom dot indicators */}
-          <div style={{ position:"absolute", left:"50%", bottom:24, transform:"translateX(-50%)", display:"flex", gap:6, zIndex:10 }}>
-            {videos.slice(0,10).map((_,i)=>(
-              <div key={i} onClick={()=>scrollTo(i)} style={{ width:i===current?20:6, height:6, borderRadius:3, background:i===current?"#6366f1":"rgba(255,255,255,0.3)", cursor:"pointer", transition:"all 0.2s" }}/>
-            ))}
-          </div>
-        </>
+                <div style={{ position:"absolute",left:5,top:"50%",transform:"translateY(-50%)",display:"flex",flexDirection:"column",gap:5,zIndex:5 }}>
+                  {videos.slice(Math.max(0,i-3),Math.min(videos.length,i+4)).map((_,di)=>{
+                    const ri=Math.max(0,i-3)+di;
+                    return <div key={ri} onClick={()=>goTo(ri)} style={{ width:3,height:ri===current?22:5,borderRadius:2,background:ri===current?"#fff":"rgba(255,255,255,0.3)",transition:"height 0.25s,background 0.25s",cursor:"pointer" }}/>;
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
       )}
     </div>
   );
 };
 
+// ============================================================
 // KEYBOARD SHORTCUTS MODAL
+// ============================================================
 const ShortcutsModal = ({ onClose, dm }) => {
   const shortcuts = [
     {key:"K or Space",desc:"Play / Pause"},
     {key:"F",desc:"Fullscreen"},
     {key:"M",desc:"Mute / Unmute"},
     {key:"→ / ←",desc:"Seek 5 seconds"},
-    {key:"↓ / ↑",desc:"Next / Prev Short (in Shorts)"},
     {key:"J / L",desc:"Seek 10 seconds"},
     {key:"0-9",desc:"Jump to % of video"},
     {key:"/",desc:"Focus search bar"},
@@ -1223,22 +1276,77 @@ const ShortcutsModal = ({ onClose, dm }) => {
   ];
   const bg=dm?"#141420":"#fff", tp=dm?"#f0f0f0":"#0f0f0f", ts=dm?"#8a8a9a":"#606060", bdr=dm?"rgba(255,255,255,0.08)":"#e0e0e0";
   return (
-    <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.7)", zIndex:500, display:"flex", alignItems:"center", justifyContent:"center", padding:16 }} onClick={onClose}>
-      <div onClick={e=>e.stopPropagation()} style={{ background:bg, borderRadius:20, padding:28, width:"100%", maxWidth:440, border:`1px solid ${bdr}`, boxShadow:"0 30px 80px rgba(0,0,0,0.5)" }}>
-        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:20 }}>
-          <div style={{ fontSize:17, fontWeight:700, color:tp }}>⌨️ Keyboard Shortcuts</div>
+    <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.7)", zIndex:500, display:"flex", alignItems:"center", justifyContent:"center" }} onClick={onClose}>
+      <div onClick={e=>e.stopPropagation()} style={{ background:bg, borderRadius:20, padding:32, width:"100%", maxWidth:460, border:`1px solid ${bdr}`, boxShadow:"0 30px 80px rgba(0,0,0,0.5)" }}>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:24 }}>
+          <div style={{ fontSize:18, fontWeight:700, color:tp }}>⌨️ Keyboard Shortcuts</div>
           <button onClick={onClose} style={{ background:"none", border:"none", color:ts, cursor:"pointer", fontSize:22 }}>×</button>
         </div>
         {shortcuts.map(s=>(
-          <div key={s.key} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"9px 0", borderBottom:`1px solid ${bdr}` }}>
-            <span style={{ color:ts, fontSize:13 }}>{s.desc}</span>
-            <kbd style={{ background:dm?"rgba(255,255,255,0.08)":"#f0f0f0", border:`1px solid ${bdr}`, borderRadius:6, padding:"3px 9px", fontSize:11, fontFamily:"monospace", color:tp, fontWeight:600 }}>{s.key}</kbd>
+          <div key={s.key} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"10px 0", borderBottom:`1px solid ${bdr}` }}>
+            <span style={{ color:ts, fontSize:14 }}>{s.desc}</span>
+            <kbd style={{ background:dm?"rgba(255,255,255,0.08)":"#f0f0f0", border:`1px solid ${bdr}`, borderRadius:6, padding:"3px 10px", fontSize:12, fontFamily:"monospace", color:tp, fontWeight:600 }}>{s.key}</kbd>
           </div>
         ))}
+        <div style={{ marginTop:16, fontSize:12, color:ts, textAlign:"center" }}>Press <kbd style={{ background:dm?"rgba(255,255,255,0.08)":"#f0f0f0", border:`1px solid ${bdr}`, borderRadius:4, padding:"1px 6px", fontSize:11 }}>?</kbd> anytime to show this</div>
       </div>
     </div>
   );
 };
+
+// ============================================================
+// ADD TO PLAYLIST MODAL
+// ============================================================
+const AddToPlaylistModal = ({ video, playlists, setPlaylists, onClose, dm }) => {
+  const [newName, setNewName] = useState("");
+  const bg=dm?"#141420":"#fff", tp=dm?"#f0f0f0":"#0f0f0f", ts=dm?"#8a8a9a":"#606060", bdr=dm?"rgba(255,255,255,0.08)":"#e0e0e0", ib=dm?"rgba(255,255,255,0.05)":"#f8f8f8", ibdr=dm?"rgba(255,255,255,0.1)":"#e0e0e0";
+  const vid=video.id?.videoId||video.id;
+
+  const toggle = (plId) => {
+    const newPls = playlists.map(p=>{
+      if (p.id!==plId) return p;
+      const has = p.videos.find(v=>(v.id?.videoId||v.id)===vid);
+      return { ...p, videos: has ? p.videos.filter(v=>(v.id?.videoId||v.id)!==vid) : [...p.videos, video] };
+    });
+    setPlaylists(newPls); storage.set("vt_playlists", newPls);
+  };
+
+  const create = () => {
+    if (!newName.trim()) return;
+    const pl = { id: Date.now().toString(), name: newName.trim(), videos: [video], createdAt: new Date().toISOString() };
+    const newPls = [...playlists, pl];
+    setPlaylists(newPls); storage.set("vt_playlists", newPls);
+    setNewName("");
+  };
+
+  return (
+    <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.7)", zIndex:500, display:"flex", alignItems:"center", justifyContent:"center" }} onClick={onClose}>
+      <div onClick={e=>e.stopPropagation()} style={{ background:bg, borderRadius:20, padding:24, width:"100%", maxWidth:360, border:`1px solid ${bdr}`, boxShadow:"0 30px 80px rgba(0,0,0,0.5)" }}>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:20 }}>
+          <div style={{ fontSize:16, fontWeight:700, color:tp }}>Save to playlist</div>
+          <button onClick={onClose} style={{ background:"none", border:"none", color:ts, cursor:"pointer", fontSize:22 }}>×</button>
+        </div>
+        {playlists.map(pl=>{
+          const has = pl.videos.find(v=>(v.id?.videoId||v.id)===vid);
+          return (
+            <div key={pl.id} onClick={()=>toggle(pl.id)} style={{ display:"flex", alignItems:"center", gap:12, padding:"10px 0", cursor:"pointer", borderBottom:`1px solid ${bdr}` }}>
+              <div style={{ width:20, height:20, borderRadius:4, border:`2px solid ${has?"#6366f1":bdr}`, background:has?"#6366f1":"transparent", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, transition:"all 0.15s" }}>
+                {has&&<svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>}
+              </div>
+              <span style={{ color:tp, fontSize:14 }}>{pl.name}</span>
+              <span style={{ marginLeft:"auto", color:ts, fontSize:12 }}>{pl.videos.length}</span>
+            </div>
+          );
+        })}
+        <div style={{ marginTop:16 }}>
+          <input value={newName} onChange={e=>setNewName(e.target.value)} onKeyDown={e=>e.key==="Enter"&&create()} placeholder="+ Create new playlist"
+            style={{ width:"100%", background:ib, border:`1px solid ${ibdr}`, borderRadius:10, padding:"10px 14px", color:tp, fontSize:13, outline:"none", boxSizing:"border-box" }}/>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 
 // ============================================================
 // MAIN APP
@@ -1266,38 +1374,35 @@ export default function App() {
   const [watchLater, setWatchLater] = useState(()=>storage.get("vt_watchlater")||[]);
   const [subs, setSubs] = useState(()=>storage.get("vt_subs")||[]);
   const [playlists, setPlaylists] = useState(()=>storage.get("vt_playlists")||[]);
+  const [watchProgress, setWatchProgress] = useState(()=>storage.get("vt_progress")||{});
   const [showShortcuts, setShowShortcuts] = useState(false);
-
-  // Detect if on mobile
-  const [isMobile, setIsMobile] = useState(()=>window.innerWidth <= 768);
-  useEffect(()=>{
-    const handler = () => setIsMobile(window.innerWidth <= 768);
-    window.addEventListener("resize", handler);
-    return () => window.removeEventListener("resize", handler);
-  }, []);
+  const [bellSubs, setBellSubs] = useState(()=>storage.get("vt_bell")||[]);
 
   useEffect(()=>{
     const s=document.createElement("style");
     s.textContent=`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@500;700&display=swap');
     *{box-sizing:border-box;margin:0;padding:0;scrollbar-width:thin;scrollbar-color:rgba(99,102,241,0.3) transparent}
-    *::-webkit-scrollbar{width:4px}*::-webkit-scrollbar-thumb{background:rgba(99,102,241,0.3);border-radius:10px}
-    body{font-family:'DM Sans',sans-serif;overflow:hidden}
+    *::-webkit-scrollbar{width:5px}*::-webkit-scrollbar-thumb{background:rgba(99,102,241,0.3);border-radius:10px}
+    html,body{overflow-x:hidden!important;max-width:100vw}
+    body{font-family:'DM Sans',sans-serif}
     @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
     @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-    @keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-8px)}}`;
+    @keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-8px)}}
+    @media(max-width:768px){#dsk-sb{display:none!important}#mob-nav{display:flex!important}.hdr-upload{display:none!important}.hdr-shorts{display:none!important}.hdr-kbd{display:none!important}}`;
     document.head.appendChild(s);
     return ()=>document.head.removeChild(s);
   },[]);
 
   useEffect(()=>{ storage.set("vt_dm",dm); document.body.style.background=dm?"#0a0a14":"#f9f9f9"; },[dm]);
 
+  // Keyboard shortcuts
   useEffect(()=>{
     const handler = (e) => {
       const tag = document.activeElement?.tagName;
       if (tag==="INPUT"||tag==="TEXTAREA") return;
       if (e.key==="?") { setShowShortcuts(s=>!s); return; }
-      if (e.key==="/") { e.preventDefault(); document.querySelector("input[placeholder*='Search']")?.focus(); return; }
-      if (e.key==="Escape") setShowShortcuts(false);
+      if (e.key==="/" ) { e.preventDefault(); document.querySelector("input[placeholder*='Search']")?.focus(); return; }
+      if (e.key==="Escape") { setShowShortcuts(false); }
     };
     window.addEventListener("keydown", handler);
     return ()=>window.removeEventListener("keydown", handler);
@@ -1312,6 +1417,7 @@ export default function App() {
   };
   const onClearSearch=()=>{ setSearchIn(""); setSuggestions([]); setSearchFocused(false); nav(prevPage==="search"?"home":prevPage); };
 
+  // Fetch suggestions with debounce
   const fetchSuggestions = useCallback((val) => {
     clearTimeout(suggestTimer.current);
     if (!val.trim() || !API_KEY) { setSuggestions([]); return; }
@@ -1323,17 +1429,10 @@ export default function App() {
       } catch(e) { setSuggestions([]); }
     }, 350);
   }, []);
-
   const onLogin=(u)=>{ setUser(u); setShowLogin(false); storage.set("vt_user",u); };
   const onLogout=()=>{ setUser(null); storage.set("vt_user",null); setShowUserMenu(false); };
 
-  const hBg=dm?"rgba(10,10,20,0.97)":"rgba(255,255,255,0.97)";
-  const tp=dm?"#f0f0f0":"#0f0f0f", ts=dm?"#8a8a9a":"#606060", bdr=dm?"rgba(255,255,255,0.06)":"#e0e0e0", bbg=dm?"rgba(255,255,255,0.06)":"#f0f0f0";
-
-  // Shorts page takes over full screen
-  if (page === "shorts") {
-    return <ShortsPage dm={dm} onVideoClick={onVideoClick} onBack={()=>nav(prevPage==="shorts"?"home":prevPage)}/>;
-  }
+  const hBg=dm?"rgba(10,10,20,0.97)":"rgba(255,255,255,0.97)", tp=dm?"#f0f0f0":"#0f0f0f", ts=dm?"#8a8a9a":"#606060", bdr=dm?"rgba(255,255,255,0.06)":"#e0e0e0", bbg=dm?"rgba(255,255,255,0.06)":"#f0f0f0";
 
   const renderPage=()=>{
     if (showLogin) return <LoginPage onLogin={onLogin} dm={dm} onBack={()=>setShowLogin(false)}/>;
@@ -1351,106 +1450,119 @@ export default function App() {
       case "upload": return <UploadPage dm={dm}/>;
       case "analytics": return <AnalyticsPage dm={dm} history={history}/>;
       case "playlists": return <PlaylistsPage playlists={playlists} setPlaylists={setPlaylists} onVideoClick={onVideoClick} dm={dm}/>;
+      case "shorts": return <ShortsPage dm={dm} onVideoClick={onVideoClick}/>;
       default: return <HomePage onVideoClick={onVideoClick} dm={dm} onCh={onCh}/>;
     }
   };
 
   return (
-    <div style={{ height:"100vh", background:dm?"#0a0a14":"#f9f9f9", display:"flex", flexDirection:"column", fontFamily:"'DM Sans',sans-serif", overflow:"hidden" }}>
+    <div style={{ minHeight:"100vh", maxWidth:"100vw", overflowX:"hidden", background:dm?"#0a0a14":"#f9f9f9", display:"flex", flexDirection:"column", fontFamily:"'DM Sans',sans-serif" }}>
       {/* HEADER */}
-      <header style={{ height:56, display:"flex", alignItems:"center", padding:"0 10px", gap:8, borderBottom:`1px solid ${bdr}`, background:hBg, backdropFilter:"blur(12px)", position:"sticky", top:0, zIndex:100, flexShrink:0 }}>
-        {/* Logo */}
-        <div style={{ display:"flex", alignItems:"center", gap:6, flexShrink:0 }}>
-          {!isMobile && (
-            <button onClick={()=>setCollapsed(c=>!c)} style={{ background:"none", border:"none", cursor:"pointer", padding:6, borderRadius:8, color:ts, display:"flex" }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
-            </button>
-          )}
-          <div onClick={()=>nav("home")} style={{ display:"flex", alignItems:"center", gap:5, cursor:"pointer", userSelect:"none" }}>
-            <div style={{ width:28, height:28, borderRadius:7, background:"linear-gradient(135deg,#6366f1,#ec4899)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+      <header style={{ height:60, display:"flex", alignItems:"center", padding:"0 10px", gap:8, borderBottom:`1px solid ${bdr}`, background:hBg, backdropFilter:"blur(12px)", position:"sticky", top:0, zIndex:100, flexShrink:0, overflow:"hidden" }}>
+        <div style={{ display:"flex", alignItems:"center", gap:10, flexShrink:0, minWidth:collapsed?48:160 }}>
+          <button onClick={()=>setCollapsed(c=>!c)} style={{ background:"none", border:"none", cursor:"pointer", padding:8, borderRadius:8, color:ts, display:"flex" }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+          </button>
+          <div onClick={()=>nav("home")} style={{ display:"flex", alignItems:"center", gap:6, cursor:"pointer", userSelect:"none" }}>
+            <div style={{ width:30, height:30, borderRadius:8, background:"linear-gradient(135deg,#6366f1,#ec4899)", display:"flex", alignItems:"center", justifyContent:"center" }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
             </div>
-            {!isMobile && <span style={{ fontSize:15, fontWeight:800, color:tp, fontFamily:"'DM Mono',monospace", letterSpacing:"-0.03em", whiteSpace:"nowrap" }}>video<span style={{ color:"#6366f1" }}>tube</span></span>}
+            {!collapsed&&<span style={{ fontSize:17, fontWeight:800, color:tp, fontFamily:"'DM Mono',monospace", letterSpacing:"-0.03em" }}>video<span style={{ color:"#6366f1" }}>tube</span></span>}
           </div>
         </div>
 
-        {/* Search bar */}
-        <div ref={searchRef} style={{ display:"flex", alignItems:"center", flex:1, maxWidth:isMobile?undefined:560, position:"relative" }}>
-          <div style={{ flex:1, display:"flex", alignItems:"center", background:searchFocused?(dm?"rgba(255,255,255,0.08)":"#fff"):(dm?"rgba(255,255,255,0.05)":"#f8f8f8"), border:`1px solid ${searchFocused?"rgba(99,102,241,0.5)":bdr}`, borderRadius:"22px 0 0 22px", overflow:"hidden", transition:"all 0.2s" }}>
+        <div ref={searchRef} style={{ display:"flex", alignItems:"center", flex:1, minWidth:0, maxWidth:580, position:"relative" }}>
+          <div style={{ flex:1, display:"flex", alignItems:"center", background:searchFocused?(dm?"rgba(255,255,255,0.08)":"#fff"):(dm?"rgba(255,255,255,0.05)":"#f8f8f8"), border:`1px solid ${searchFocused?"rgba(99,102,241,0.5)":bdr}`, borderRadius:"24px 0 0 24px", overflow:"hidden", transition:"all 0.2s", boxShadow:searchFocused?"0 0 0 3px rgba(99,102,241,0.12)":"none" }}>
             <input
               value={searchIn}
               onChange={e=>{ setSearchIn(e.target.value); fetchSuggestions(e.target.value); }}
               onFocus={()=>setSearchFocused(true)}
               onBlur={()=>setTimeout(()=>setSearchFocused(false),180)}
               onKeyDown={e=>{ if(e.key==="Enter")onSearch(); if(e.key==="Escape")onClearSearch(); }}
-              placeholder={isMobile?"Search...":"Search videos, channels..."}
-              style={{ flex:1, background:"transparent", border:"none", outline:"none", color:tp, fontSize:13, padding:"9px 12px" }}
+              placeholder="Search videos, channels..."
+              style={{ flex:1, background:"transparent", border:"none", outline:"none", color:tp, fontSize:14, padding:"10px 16px" }}
             />
             {searchIn&&(
-              <button onClick={onClearSearch} style={{ background:"none", border:"none", cursor:"pointer", color:ts, padding:"0 8px", fontSize:16 }}>✕</button>
+              <button onClick={onClearSearch}
+                style={{ background:"none", border:"none", cursor:"pointer", color:ts, padding:"0 10px", display:"flex", alignItems:"center", fontSize:18, lineHeight:1 }}
+                title="Clear search">
+                ✕
+              </button>
             )}
           </div>
-          <button onClick={()=>onSearch()} style={{ background:bbg, border:`1px solid ${bdr}`, borderLeft:"none", borderRadius:"0 22px 22px 0", padding:"9px 14px", cursor:"pointer", color:ts, display:"flex" }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          <button onClick={()=>onSearch()} style={{ background:bbg, border:`1px solid ${bdr}`, borderLeft:"none", borderRadius:"0 24px 24px 0", padding:"10px 18px", cursor:"pointer", color:ts, display:"flex" }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          </button>
+          <button title="Voice search" onClick={()=>{
+            if(!window.SpeechRecognition&&!window.webkitSpeechRecognition){alert("Voice search not supported in your browser");return;}
+            const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+            const sr=new SR(); sr.lang="en-US"; sr.start();
+            sr.onresult=(e)=>{ const t=e.results[0][0].transcript; setSearchIn(t); onSearch(t); };
+          }} style={{ background:"none", border:"none", cursor:"pointer", color:ts, padding:"8px 6px", display:"flex", alignItems:"center", marginLeft:4 }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.91-3c-.49 0-.9.36-.98.85C16.52 14.2 14.47 16 12 16s-4.52-1.8-4.93-4.15c-.08-.49-.49-.85-.98-.85-.61 0-1.09.54-1 1.14.49 3 2.89 5.35 5.91 5.78V20c0 .55.45 1 1 1s1-.45 1-1v-2.08c3.02-.43 5.42-2.78 5.91-5.78.1-.6-.39-1.14-1-1.14z"/></svg>
           </button>
 
-          {/* Suggestions dropdown */}
+          {/* Suggestions Dropdown */}
           {searchFocused && (searchIn.trim() ? suggestions.length > 0 : true) && (
-            <div style={{ position:"absolute", top:"calc(100% + 6px)", left:0, right:0, background:dm?"#141420":"#fff", border:`1px solid ${dm?"rgba(255,255,255,0.1)":"#e0e0e0"}`, borderRadius:12, overflow:"hidden", boxShadow:"0 16px 48px rgba(0,0,0,0.25)", zIndex:300 }}>
+            <div style={{ position:"absolute", top:"calc(100% + 6px)", left:0, right:0, background:dm?"#141420":"#fff", border:`1px solid ${dm?"rgba(255,255,255,0.1)":"#e0e0e0"}`, borderRadius:14, overflow:"hidden", boxShadow:"0 16px 48px rgba(0,0,0,0.25)", zIndex:300 }}>
               {!searchIn.trim() ? (
                 <>
-                  <div style={{ padding:"8px 14px 4px", fontSize:10, color:dm?"#555":"#909090", textTransform:"uppercase", letterSpacing:"0.07em", fontWeight:600 }}>Trending</div>
-                  {["JavaScript tutorial 2024","React hooks explained","Python machine learning","System design interview","CSS animations","Node.js REST API"].map((s,i)=>(
+                  <div style={{ padding:"10px 16px 6px", fontSize:11, color:dm?"#555":"#909090", textTransform:"uppercase", letterSpacing:"0.07em", fontWeight:600 }}>Trending Searches</div>
+                  {["JavaScript tutorial 2024","React hooks explained","Python machine learning","System design interview","CSS animations","Node.js REST API","TypeScript for beginners","Docker tutorial"].map((s,i)=>(
                     <div key={i} onMouseDown={()=>onSearch(s)}
-                      style={{ display:"flex", alignItems:"center", gap:10, padding:"9px 14px", cursor:"pointer" }}
+                      style={{ display:"flex", alignItems:"center", gap:12, padding:"10px 16px", cursor:"pointer", transition:"background 0.1s" }}
                       onMouseEnter={e=>e.currentTarget.style.background=dm?"rgba(255,255,255,0.05)":"rgba(0,0,0,0.04)"}
                       onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-                      <span style={{ fontSize:14 }}>🔥</span>
-                      <span style={{ color:dm?"#d0d0e0":"#0f0f0f", fontSize:13 }}>{s}</span>
+                      <span style={{ fontSize:16 }}>🔥</span>
+                      <span style={{ color:dm?"#d0d0e0":"#0f0f0f", fontSize:14 }}>{s}</span>
                     </div>
                   ))}
                 </>
-              ) : suggestions.map((s,i)=>(
-                <div key={i} onMouseDown={()=>onSearch(s)}
-                  style={{ display:"flex", alignItems:"center", gap:10, padding:"9px 14px", cursor:"pointer" }}
-                  onMouseEnter={e=>e.currentTarget.style.background=dm?"rgba(255,255,255,0.05)":"rgba(0,0,0,0.04)"}
-                  onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill={dm?"#555":"#909090"}><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-                  <span style={{ color:dm?"#d0d0e0":"#0f0f0f", fontSize:13, flex:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{s}</span>
-                </div>
-              ))}
+              ) : (
+                <>
+                  <div style={{ padding:"10px 16px 6px", fontSize:11, color:dm?"#555":"#909090", textTransform:"uppercase", letterSpacing:"0.07em", fontWeight:600 }}>Suggestions</div>
+                  {suggestions.map((s,i)=>(
+                    <div key={i} onMouseDown={()=>onSearch(s)}
+                      style={{ display:"flex", alignItems:"center", gap:12, padding:"10px 16px", cursor:"pointer", transition:"background 0.1s" }}
+                      onMouseEnter={e=>e.currentTarget.style.background=dm?"rgba(255,255,255,0.05)":"rgba(0,0,0,0.04)"}
+                      onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill={dm?"#555":"#909090"}><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                      <span style={{ color:dm?"#d0d0e0":"#0f0f0f", fontSize:14, flex:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{s}</span>
+                      <button onMouseDown={e=>{e.stopPropagation();setSearchIn(s);fetchSuggestions(s);}} style={{ background:"none", border:"none", color:dm?"#555":"#909090", cursor:"pointer", fontSize:12, transform:"rotate(315deg)", padding:"2px 4px", flexShrink:0 }}>↗</button>
+                    </div>
+                  ))}
+                </>
+              )}
             </div>
           )}
         </div>
 
-        {/* Right controls */}
-        <div style={{ display:"flex", alignItems:"center", gap:6, flexShrink:0, marginLeft:"auto" }}>
-          <button onClick={()=>setDm(d=>!d)} style={{ background:bbg, border:`1px solid ${bdr}`, borderRadius:20, padding:"6px 10px", color:ts, cursor:"pointer", fontSize:14 }}>{dm?"☀️":"🌙"}</button>
-          {!isMobile && (
-            <>
-              <button onClick={()=>setShowShortcuts(true)} style={{ background:bbg, border:`1px solid ${bdr}`, borderRadius:20, padding:"6px 10px", color:ts, cursor:"pointer", fontSize:12, fontWeight:600 }}>⌨️</button>
-              <button onClick={()=>nav("shorts")} style={{ background:bbg, border:`1px solid ${bdr}`, borderRadius:20, padding:"6px 12px", color:ts, cursor:"pointer", fontSize:12, display:"flex", alignItems:"center", gap:4 }}>🎬 Shorts</button>
-              <button onClick={()=>nav("upload")} style={{ background:bbg, border:`1px solid ${bdr}`, borderRadius:20, padding:"6px 12px", color:ts, cursor:"pointer", fontSize:12, display:"flex", alignItems:"center", gap:4 }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg> Upload
-              </button>
-            </>
-          )}
+        <div style={{ marginLeft:"auto", display:"flex", alignItems:"center", gap:8 }}>
+          <button onClick={()=>setDm(d=>!d)} style={{ background:bbg, border:`1px solid ${bdr}`, borderRadius:24, padding:"7px 12px", color:ts, cursor:"pointer", fontSize:16 }} title="Toggle dark/light mode">{dm?"☀️":"🌙"}</button>
+          <button onClick={()=>setShowShortcuts(true)} style={{ background:bbg, border:`1px solid ${bdr}`, borderRadius:24, padding:"7px 12px", color:ts, cursor:"pointer", fontSize:14, fontWeight:600 }} title="Keyboard shortcuts (?)">⌨️</button>
+          <button className="hdr-shorts" onClick={()=>nav("shorts")} style={{ background:bbg, border:`1px solid ${bdr}`, borderRadius:24, padding:"7px 14px", color:ts, cursor:"pointer", fontSize:13, display:"flex", alignItems:"center", gap:6, fontWeight:500 }}>
+            🎬 Shorts
+          </button>
+          <button className="hdr-upload" onClick={()=>nav("upload")} style={{ background:bbg, border:`1px solid ${bdr}`, borderRadius:24, padding:"7px 14px", color:ts, cursor:"pointer", fontSize:13, display:"flex", alignItems:"center", gap:6, fontWeight:500 }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>
+            Upload
+          </button>
           <div style={{ position:"relative" }}>
-            <button onClick={()=>{setShowNotif(n=>!n);setShowUserMenu(false);}} style={{ background:"transparent", border:"none", padding:6, color:ts, cursor:"pointer", display:"flex", position:"relative" }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
-              <div style={{ position:"absolute", top:4, right:4, width:7, height:7, borderRadius:"50%", background:"#ec4899", border:`2px solid ${dm?"#0a0a14":"#fff"}` }}/>
+            <button onClick={()=>{setShowNotif(n=>!n);setShowUserMenu(false);}} style={{ background:"transparent", border:"none", padding:8, color:ts, cursor:"pointer", display:"flex", position:"relative" }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+              <div style={{ position:"absolute", top:6, right:6, width:8, height:8, borderRadius:"50%", background:"#ec4899", border:`2px solid ${dm?"#0a0a14":"#fff"}` }}/>
             </button>
             {showNotif&&(
-              <div style={{ position:"absolute", top:"calc(100% + 6px)", right:0, width:280, background:dm?"#141420":"#fff", border:`1px solid ${bdr}`, borderRadius:14, overflow:"hidden", boxShadow:"0 20px 60px rgba(0,0,0,0.3)", zIndex:200 }}>
-                <div style={{ padding:"12px 16px", borderBottom:`1px solid ${bdr}`, display:"flex", justifyContent:"space-between" }}>
-                  <span style={{ color:tp, fontWeight:700, fontSize:14 }}>Notifications</span>
+              <div style={{ position:"absolute", top:"calc(100% + 8px)", right:0, width:320, background:dm?"#141420":"#fff", border:`1px solid ${bdr}`, borderRadius:16, overflow:"hidden", boxShadow:"0 20px 60px rgba(0,0,0,0.3)", zIndex:200 }}>
+                <div style={{ padding:"14px 20px", borderBottom:`1px solid ${bdr}`, display:"flex", justifyContent:"space-between" }}>
+                  <span style={{ color:tp, fontWeight:700 }}>Notifications</span>
                   <button onClick={()=>setShowNotif(false)} style={{ background:"none", border:"none", color:ts, cursor:"pointer", fontSize:18 }}>×</button>
                 </div>
                 {[{t:"🔥 Trending in JavaScript right now",d:"2h ago",u:true},{t:"📺 New videos from your subscriptions",d:"5h ago",u:true},{t:"🔔 Weekly digest ready",d:"1d ago",u:false}].map((n,i)=>(
-                  <div key={i} style={{ display:"flex", gap:8, padding:"10px 16px", background:n.u?(dm?"rgba(99,102,241,0.05)":"rgba(99,102,241,0.04)"):"transparent", borderBottom:`1px solid ${bdr}` }}>
-                    {n.u&&<div style={{ width:6, height:6, borderRadius:"50%", background:"#6366f1", marginTop:5, flexShrink:0 }}/>}
-                    {!n.u&&<div style={{ width:6, flexShrink:0 }}/>}
-                    <div><div style={{ color:tp, fontSize:12, lineHeight:1.5 }}>{n.t}</div><div style={{ color:dm?"#555":"#909090", fontSize:11, marginTop:2 }}>{n.d}</div></div>
+                  <div key={i} style={{ display:"flex", gap:10, padding:"12px 20px", background:n.u?(dm?"rgba(99,102,241,0.05)":"rgba(99,102,241,0.04)"):"transparent", borderBottom:`1px solid ${bdr}` }}>
+                    {n.u&&<div style={{ width:7, height:7, borderRadius:"50%", background:"#6366f1", marginTop:6, flexShrink:0 }}/>}
+                    {!n.u&&<div style={{ width:7, flexShrink:0 }}/>}
+                    <div><div style={{ color:tp, fontSize:13, lineHeight:1.5 }}>{n.t}</div><div style={{ color:dm?"#555":"#909090", fontSize:11, marginTop:3 }}>{n.d}</div></div>
                   </div>
                 ))}
               </div>
@@ -1459,58 +1571,45 @@ export default function App() {
 
           {user?(
             <div style={{ position:"relative" }}>
-              <div onClick={()=>{setShowUserMenu(m=>!m);setShowNotif(false);}} style={{ width:30, height:30, borderRadius:"50%", background:"#6366f1", display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, color:"#fff", cursor:"pointer" }}>{ini(user.name)}</div>
+              <div onClick={()=>{setShowUserMenu(m=>!m);setShowNotif(false);}} style={{ width:34, height:34, borderRadius:"50%", background:"#6366f1", display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, fontWeight:700, color:"#fff", cursor:"pointer", border:"2px solid rgba(99,102,241,0.4)" }}>{ini(user.name)}</div>
               {showUserMenu&&(
-                <div style={{ position:"absolute", top:"calc(100% + 6px)", right:0, width:190, background:dm?"#141420":"#fff", border:`1px solid ${bdr}`, borderRadius:14, overflow:"hidden", boxShadow:"0 20px 60px rgba(0,0,0,0.3)", zIndex:200 }}>
-                  <div style={{ padding:"12px 14px", borderBottom:`1px solid ${bdr}` }}>
-                    <div style={{ color:tp, fontWeight:600, fontSize:13 }}>{user.name}</div>
-                    <div style={{ color:ts, fontSize:11, marginTop:2 }}>{user.email}</div>
+                <div style={{ position:"absolute", top:"calc(100% + 8px)", right:0, width:200, background:dm?"#141420":"#fff", border:`1px solid ${bdr}`, borderRadius:14, overflow:"hidden", boxShadow:"0 20px 60px rgba(0,0,0,0.3)", zIndex:200 }}>
+                  <div style={{ padding:"14px 16px", borderBottom:`1px solid ${bdr}` }}>
+                    <div style={{ color:tp, fontWeight:600, fontSize:14 }}>{user.name}</div>
+                    <div style={{ color:ts, fontSize:12, marginTop:2 }}>{user.email}</div>
                   </div>
-                  {[{l:"📜 History",p:"history"},{l:"👍 Liked",p:"liked"},{l:"⏰ Watch Later",p:"watchlater"},{l:"📋 Playlists",p:"playlists"},{l:"📢 Subscriptions",p:"subscriptions"},{l:"📊 Analytics",p:"analytics"},{l:"⬆️ Upload",p:"upload"},{l:"🎬 Shorts",p:"shorts"}].map(it=>(
+                  {[{l:"📜 History",p:"history"},{l:"👍 Liked Videos",p:"liked"},{l:"⏰ Watch Later",p:"watchlater"},{l:"📋 Playlists",p:"playlists"},{l:"📢 Subscriptions",p:"subscriptions"},{l:"📊 Analytics",p:"analytics"},{l:"⬆️ Upload Studio",p:"upload"}].map(it=>(
                     <button key={it.p} onClick={()=>{nav(it.p);setShowUserMenu(false);}}
-                      style={{ width:"100%", background:"transparent", border:"none", padding:"9px 14px", color:ts, cursor:"pointer", textAlign:"left", fontSize:13 }}
+                      style={{ width:"100%", background:"transparent", border:"none", padding:"10px 16px", color:ts, cursor:"pointer", textAlign:"left", fontSize:13 }}
                       onMouseEnter={e=>e.currentTarget.style.background=dm?"rgba(255,255,255,0.05)":"rgba(0,0,0,0.04)"}
                       onMouseLeave={e=>e.currentTarget.style.background="transparent"}>{it.l}</button>
                   ))}
                   <div style={{ height:1, background:bdr }}/>
-                  <button onClick={onLogout} style={{ width:"100%", background:"transparent", border:"none", padding:"9px 14px", color:"#ef4444", cursor:"pointer", textAlign:"left", fontSize:13 }}>🚪 Sign Out</button>
+                  <button onClick={onLogout} style={{ width:"100%", background:"transparent", border:"none", padding:"10px 16px", color:"#ef4444", cursor:"pointer", textAlign:"left", fontSize:13 }}>🚪 Sign Out</button>
                 </div>
               )}
             </div>
           ):(
-            <button onClick={()=>setShowLogin(true)} style={{ padding:"7px 14px", borderRadius:20, background:"transparent", border:"1px solid #6366f1", color:"#6366f1", cursor:"pointer", fontSize:12, fontWeight:600, whiteSpace:"nowrap" }}>Sign In</button>
+            <button onClick={()=>setShowLogin(true)} style={{ padding:"8px 16px", borderRadius:24, background:"transparent", border:"1px solid #6366f1", color:"#6366f1", cursor:"pointer", fontSize:13, fontWeight:600 }}>Sign In</button>
           )}
         </div>
       </header>
 
       {/* BODY */}
       <div style={{ flex:1, display:"flex", minHeight:0, overflow:"hidden" }}>
-        {/* Sidebar — desktop only */}
-        {!showLogin && !isMobile && (
-          <Sidebar collapsed={collapsed} page={page} nav={nav} dm={dm} subs={subs} onCh={onCh}/>
-        )}
-        <div style={{ flex:1, display:"flex", flexDirection:"column", minWidth:0, overflow:"hidden" }}>
-          {renderPage()}
-        </div>
+        {!showLogin&&<div id="dsk-sb"><Sidebar collapsed={collapsed} page={page} nav={nav} dm={dm} subs={subs} onCh={onCh}/></div>}
+        {renderPage()}
       </div>
 
-      {/* MOBILE BOTTOM NAV */}
-      {isMobile && !showLogin && (
-        <div style={{ position:"fixed", bottom:0, left:0, right:0, zIndex:150, background:dm?"#0a0a14":"#fff", borderTop:`1px solid ${bdr}`, display:"flex", paddingBottom:"env(safe-area-inset-bottom,0px)" }}>
-          {[
-            {id:"home",l:"Home",ic:"M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"},
-            {id:"trending",l:"Trending",ic:"M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"},
-            {id:"shorts",l:"Shorts",ic:"M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"},
-            {id:"subscriptions",l:"Subs",ic:"M20 8H4V6h16v2zm-2-6H6v2h12V2zm4 10v8l-6-4 6-4zm-8 0H2v8h12v-8z"},
-            {id:"history",l:"History",ic:"M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"},
-          ].map(i=>(
-            <button key={i.id} onClick={()=>nav(i.id)} style={{ flex:1, background:"none", border:"none", cursor:"pointer", display:"flex", flexDirection:"column", alignItems:"center", gap:2, padding:"8px 4px 10px", color:page===i.id?"#6366f1":(dm?"#666":"#909090") }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d={i.ic}/></svg>
-              <span style={{ fontSize:9, fontWeight:500 }}>{i.l}</span>
-            </button>
-          ))}
-        </div>
-      )}
+      {/* MOBILE NAV */}
+      <div id="mob-nav" style={{ display:"none", position:"fixed", bottom:0, left:0, right:0, zIndex:150, background:dm?"#0a0a14":"#fff", borderTop:`1px solid ${bdr}`, padding:"8px 0" }}>
+        {[{id:"home",l:"Home",ic:"M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"},{id:"trending",l:"Trending",ic:"M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"},{id:"live",l:"Live",ic:"M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"},{id:"subscriptions",l:"Subs",ic:"M20 8H4V6h16v2zm-2-6H6v2h12V2zm4 10v8l-6-4 6-4zm-8 0H2v8h12v-8z"},{id:"history",l:"History",ic:"M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"}].map(i=>(
+          <button key={i.id} onClick={()=>nav(i.id)} style={{ flex:1, background:"none", border:"none", cursor:"pointer", display:"flex", flexDirection:"column", alignItems:"center", gap:3, padding:"6px 4px", color:page===i.id?"#6366f1":(dm?"#666":"#909090") }}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d={i.ic}/></svg>
+            <span style={{ fontSize:10, fontWeight:500 }}>{i.l}</span>
+          </button>
+        ))}
+      </div>
 
       {(showNotif||showUserMenu)&&<div style={{ position:"fixed", inset:0, zIndex:99 }} onClick={()=>{setShowNotif(false);setShowUserMenu(false);}}/>}
       {showShortcuts&&<ShortcutsModal onClose={()=>setShowShortcuts(false)} dm={dm}/>}
