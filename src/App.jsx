@@ -114,6 +114,9 @@ const Sidebar = ({ collapsed, page, nav, dm, subs, onCh }) => {
     {id:"liked",l:"Liked Videos",ic:"M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"},
     {id:"watchlater",l:"Watch Later",ic:"M22 9V7h-2V5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c.55 0 1-.45 1-1v-3h1v-2h-2V9h2zm-4 10H4V5h14v14zm-2-8H6v-2h10v2zm-4 4H6v-2h6v2zm4-8H6V5h10v2z"},
     {id:"upload",l:"Upload Studio",ic:"M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"},
+    {id:"shorts",l:"Shorts",ic:"M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"},
+    {id:"analytics",l:"Analytics",ic:"M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"},
+    {id:"playlists",l:"Playlists",ic:"M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12.5v-9l6 4.5-6 4.5z"},
   ];
   const bg=dm?"#0a0a14":"#fff", bdr=dm?"rgba(255,255,255,0.05)":"#e0e0e0";
   const ac="#6366f1", abg=dm?"rgba(99,102,241,0.15)":"rgba(99,102,241,0.1)", tc=dm?"#a0a0b0":"#606060";
@@ -893,6 +896,429 @@ const LoginPage = ({ onLogin, dm, onBack }) => {
   );
 };
 
+
+// ============================================================
+// ANALYTICS DASHBOARD
+// ============================================================
+const AnalyticsPage = ({ dm, history }) => {
+  const bg=dm?"#0a0a14":"#f9f9f9", tp=dm?"#f0f0f0":"#0f0f0f", ts=dm?"#8a8a9a":"#606060", cb=dm?"#141420":"#fff", bdr=dm?"rgba(255,255,255,0.07)":"#e0e0e0";
+  const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  const viewData = [4200,6800,5100,9300,7600,12400,8900];
+  const subData = [120,340,180,560,420,780,340];
+  const maxV = Math.max(...viewData), maxS = Math.max(...subData);
+  const stats = [
+    {l:"Total Views",v:"2.4M",ch:"+12.3%",up:true,icon:"👁"},
+    {l:"Subscribers",v:"48.2K",ch:"+8.7%",up:true,icon:"👥"},
+    {l:"Watch Time",v:"142K hrs",ch:"+23.1%",up:true,icon:"⏱"},
+    {l:"Revenue",v:"$3,240",ch:"-2.4%",up:false,icon:"💰"},
+  ];
+  const topVideos = (history||[]).slice(0,5).map((v,i)=>({
+    title: v.snippet?.title||"Unknown", views: fmtViews(v.statistics?.viewCount||Math.floor(Math.random()*500000+10000)),
+    likes: fmtViews(v.statistics?.likeCount||Math.floor(Math.random()*20000+500)), ctr:`${(Math.random()*8+2).toFixed(1)}%`
+  }));
+
+  return (
+    <div style={{ flex:1, overflowY:"auto", padding:"24px 28px 80px", background:bg }}>
+      <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:28 }}>
+        <div style={{ width:4, height:28, background:"linear-gradient(180deg,#6366f1,#ec4899)", borderRadius:2 }}/>
+        <h2 style={{ color:tp, fontSize:22, fontWeight:700, margin:0 }}>📊 Creator Analytics</h2>
+        <div style={{ marginLeft:"auto", padding:"6px 14px", background:"rgba(99,102,241,0.15)", border:"1px solid rgba(99,102,241,0.3)", borderRadius:20, fontSize:12, color:"#8b8cf8", fontWeight:600 }}>Last 28 days</div>
+      </div>
+
+      {/* Stats Cards */}
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))", gap:16, marginBottom:28 }}>
+        {stats.map(s=>(
+          <div key={s.l} style={{ background:cb, borderRadius:16, padding:"20px", border:`1px solid ${bdr}` }}>
+            <div style={{ fontSize:24, marginBottom:8 }}>{s.icon}</div>
+            <div style={{ fontSize:24, fontWeight:800, color:tp, marginBottom:4 }}>{s.v}</div>
+            <div style={{ fontSize:13, color:ts, marginBottom:8 }}>{s.l}</div>
+            <div style={{ fontSize:12, fontWeight:600, color:s.up?"#10b981":"#ef4444" }}>{s.up?"↑":"↓"} {s.ch} vs last period</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Charts Row */}
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:20, marginBottom:28 }}>
+        {/* Views Chart */}
+        <div style={{ background:cb, borderRadius:16, padding:24, border:`1px solid ${bdr}` }}>
+          <div style={{ fontSize:15, fontWeight:700, color:tp, marginBottom:20 }}>Views This Week</div>
+          <div style={{ display:"flex", alignItems:"flex-end", gap:8, height:120 }}>
+            {viewData.map((v,i)=>(
+              <div key={i} style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", gap:6 }}>
+                <div style={{ fontSize:9, color:ts }}>{fmtViews(v)}</div>
+                <div style={{ width:"100%", background:"linear-gradient(180deg,#6366f1,#8b5cf6)", borderRadius:"4px 4px 0 0", height:`${(v/maxV)*90}px`, transition:"height 0.5s", minHeight:4 }}/>
+                <div style={{ fontSize:10, color:ts }}>{days[i]}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Subscribers Chart */}
+        <div style={{ background:cb, borderRadius:16, padding:24, border:`1px solid ${bdr}` }}>
+          <div style={{ fontSize:15, fontWeight:700, color:tp, marginBottom:20 }}>New Subscribers</div>
+          <div style={{ display:"flex", alignItems:"flex-end", gap:8, height:120 }}>
+            {subData.map((v,i)=>(
+              <div key={i} style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", gap:6 }}>
+                <div style={{ fontSize:9, color:ts }}>{v}</div>
+                <div style={{ width:"100%", background:"linear-gradient(180deg,#ec4899,#f97316)", borderRadius:"4px 4px 0 0", height:`${(v/maxS)*90}px`, transition:"height 0.5s", minHeight:4 }}/>
+                <div style={{ fontSize:10, color:ts }}>{days[i]}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Audience Metrics */}
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:20, marginBottom:28 }}>
+        <div style={{ background:cb, borderRadius:16, padding:24, border:`1px solid ${bdr}` }}>
+          <div style={{ fontSize:15, fontWeight:700, color:tp, marginBottom:16 }}>Audience Demographics</div>
+          {[["18-24","32%",0.32],["25-34","41%",0.41],["35-44","18%",0.18],["45+","9%",0.09]].map(([age,pct,val])=>(
+            <div key={age} style={{ marginBottom:12 }}>
+              <div style={{ display:"flex", justifyContent:"space-between", marginBottom:4 }}>
+                <span style={{ color:ts, fontSize:13 }}>{age}</span><span style={{ color:tp, fontSize:13, fontWeight:600 }}>{pct}</span>
+              </div>
+              <div style={{ height:6, background:dm?"rgba(255,255,255,0.07)":"#e0e0e0", borderRadius:3, overflow:"hidden" }}>
+                <div style={{ height:"100%", width:`${val*100}%`, background:"linear-gradient(90deg,#6366f1,#ec4899)", borderRadius:3 }}/>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div style={{ background:cb, borderRadius:16, padding:24, border:`1px solid ${bdr}` }}>
+          <div style={{ fontSize:15, fontWeight:700, color:tp, marginBottom:16 }}>Traffic Sources</div>
+          {[["YouTube Search","45%",0.45,"#6366f1"],["Suggested Videos","28%",0.28,"#ec4899"],["Direct/External","15%",0.15,"#f59e0b"],["Browse Features","12%",0.12,"#10b981"]].map(([src,pct,val,color])=>(
+            <div key={src} style={{ display:"flex", alignItems:"center", gap:12, marginBottom:12 }}>
+              <div style={{ width:10, height:10, borderRadius:"50%", background:color, flexShrink:0 }}/>
+              <div style={{ flex:1 }}>
+                <div style={{ display:"flex", justifyContent:"space-between", marginBottom:3 }}>
+                  <span style={{ color:ts, fontSize:12 }}>{src}</span><span style={{ color:tp, fontSize:12, fontWeight:600 }}>{pct}</span>
+                </div>
+                <div style={{ height:4, background:dm?"rgba(255,255,255,0.07)":"#e0e0e0", borderRadius:2, overflow:"hidden" }}>
+                  <div style={{ height:"100%", width:`${val*100}%`, background:color, borderRadius:2 }}/>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Top Videos Table */}
+      {topVideos.length>0&&(
+        <div style={{ background:cb, borderRadius:16, padding:24, border:`1px solid ${bdr}` }}>
+          <div style={{ fontSize:15, fontWeight:700, color:tp, marginBottom:16 }}>Top Performing Videos</div>
+          <div style={{ overflowX:"auto" }}>
+            <table style={{ width:"100%", borderCollapse:"collapse" }}>
+              <thead>
+                <tr>
+                  {["Video","Views","Likes","CTR"].map(h=>(
+                    <th key={h} style={{ textAlign:"left", padding:"8px 12px", fontSize:12, color:ts, fontWeight:600, textTransform:"uppercase", letterSpacing:"0.06em", borderBottom:`1px solid ${bdr}` }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {topVideos.map((v,i)=>(
+                  <tr key={i}>
+                    <td style={{ padding:"12px", fontSize:13, color:tp, borderBottom:`1px solid ${bdr}`, maxWidth:300 }}>
+                      <div style={{ overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{v.title}</div>
+                    </td>
+                    <td style={{ padding:"12px", fontSize:13, color:ts, borderBottom:`1px solid ${bdr}` }}>{v.views}</td>
+                    <td style={{ padding:"12px", fontSize:13, color:ts, borderBottom:`1px solid ${bdr}` }}>{v.likes}</td>
+                    <td style={{ padding:"12px", fontSize:13, color:"#10b981", fontWeight:600, borderBottom:`1px solid ${bdr}` }}>{v.ctr}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ============================================================
+// PLAYLISTS PAGE
+// ============================================================
+const PlaylistsPage = ({ playlists, setPlaylists, onVideoClick, dm }) => {
+  const [showCreate, setShowCreate] = useState(false);
+  const [newName, setNewName] = useState("");
+  const [openPl, setOpenPl] = useState(null);
+  const bg=dm?"#0a0a14":"#f9f9f9", tp=dm?"#f0f0f0":"#0f0f0f", ts=dm?"#8a8a9a":"#606060", cb=dm?"#141420":"#fff", bdr=dm?"rgba(255,255,255,0.07)":"#e0e0e0", ib=dm?"rgba(255,255,255,0.05)":"#f8f8f8", ibdr=dm?"rgba(255,255,255,0.1)":"#e0e0e0";
+
+  const createPlaylist = () => {
+    if (!newName.trim()) return;
+    const pl = { id: Date.now().toString(), name: newName.trim(), videos: [], createdAt: new Date().toISOString() };
+    const newPls = [...playlists, pl];
+    setPlaylists(newPls); storage.set("vt_playlists", newPls);
+    setNewName(""); setShowCreate(false);
+  };
+
+  const deletePlaylist = (id) => {
+    const newPls = playlists.filter(p=>p.id!==id);
+    setPlaylists(newPls); storage.set("vt_playlists", newPls);
+    if (openPl===id) setOpenPl(null);
+  };
+
+  const removeFromPlaylist = (plId, vidId) => {
+    const newPls = playlists.map(p=>p.id===plId?{...p,videos:p.videos.filter(v=>(v.id?.videoId||v.id)!==vidId)}:p);
+    setPlaylists(newPls); storage.set("vt_playlists", newPls);
+  };
+
+  const openedPl = playlists.find(p=>p.id===openPl);
+
+  return (
+    <div style={{ flex:1, overflowY:"auto", padding:"24px 28px 80px", background:bg }}>
+      <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:24 }}>
+        <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+          <div style={{ width:4, height:28, background:"linear-gradient(180deg,#6366f1,#ec4899)", borderRadius:2 }}/>
+          <h2 style={{ color:tp, fontSize:22, fontWeight:700, margin:0 }}>📋 Playlists</h2>
+        </div>
+        <button onClick={()=>setShowCreate(true)} style={{ padding:"10px 20px", background:"#6366f1", border:"none", borderRadius:24, color:"#fff", fontSize:13, fontWeight:600, cursor:"pointer", display:"flex", alignItems:"center", gap:6 }}>
+          + New Playlist
+        </button>
+      </div>
+
+      {showCreate&&(
+        <div style={{ background:cb, borderRadius:16, padding:24, border:`1px solid ${bdr}`, marginBottom:24 }}>
+          <div style={{ fontSize:15, fontWeight:700, color:tp, marginBottom:16 }}>Create New Playlist</div>
+          <input value={newName} onChange={e=>setNewName(e.target.value)} onKeyDown={e=>e.key==="Enter"&&createPlaylist()} placeholder="Playlist name..."
+            style={{ width:"100%", background:ib, border:`1px solid ${ibdr}`, borderRadius:10, padding:"11px 14px", color:tp, fontSize:14, outline:"none", boxSizing:"border-box", marginBottom:12 }}/>
+          <div style={{ display:"flex", gap:10 }}>
+            <button onClick={createPlaylist} style={{ padding:"10px 24px", background:"#6366f1", border:"none", borderRadius:20, color:"#fff", fontSize:13, fontWeight:600, cursor:"pointer" }}>Create</button>
+            <button onClick={()=>{setShowCreate(false);setNewName("");}} style={{ padding:"10px 20px", background:"transparent", border:`1px solid ${ibdr}`, borderRadius:20, color:ts, fontSize:13, cursor:"pointer" }}>Cancel</button>
+          </div>
+        </div>
+      )}
+
+      {playlists.length===0?(
+        <div style={{ textAlign:"center", padding:"80px 20px" }}>
+          <div style={{ fontSize:48, marginBottom:16 }}>📋</div>
+          <div style={{ color:tp, fontSize:18, fontWeight:600, marginBottom:8 }}>No playlists yet</div>
+          <div style={{ color:ts, fontSize:14, marginBottom:24 }}>Create a playlist to organize your videos</div>
+          <button onClick={()=>setShowCreate(true)} style={{ padding:"12px 28px", background:"#6366f1", border:"none", borderRadius:24, color:"#fff", fontSize:14, fontWeight:600, cursor:"pointer" }}>Create Playlist</button>
+        </div>
+      ):(
+        openedPl?(
+          <div>
+            <button onClick={()=>setOpenPl(null)} style={{ background:"none", border:"none", color:"#6366f1", cursor:"pointer", fontSize:14, fontWeight:600, marginBottom:16, display:"flex", alignItems:"center", gap:6 }}>← Back to Playlists</button>
+            <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:20 }}>
+              <div>
+                <div style={{ fontSize:20, fontWeight:700, color:tp }}>{openedPl.name}</div>
+                <div style={{ fontSize:13, color:ts }}>{openedPl.videos.length} videos</div>
+              </div>
+              <button onClick={()=>deletePlaylist(openedPl.id)} style={{ background:"rgba(239,68,68,0.1)", border:"1px solid rgba(239,68,68,0.3)", color:"#ef4444", padding:"8px 16px", borderRadius:20, cursor:"pointer", fontSize:13 }}>Delete Playlist</button>
+            </div>
+            {openedPl.videos.length===0?(
+              <div style={{ textAlign:"center", padding:"40px", color:ts }}>No videos in this playlist yet. Like or save videos to add them.</div>
+            ):(
+              <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))", gap:20 }}>
+                {openedPl.videos.map(v=>{
+                  const vid=v.id?.videoId||v.id;
+                  return (
+                    <div key={vid} style={{ position:"relative" }}>
+                      <VideoCard video={v} onClick={onVideoClick} dm={dm} onCh={()=>{}}/>
+                      <button onClick={()=>removeFromPlaylist(openedPl.id,vid)} style={{ position:"absolute", top:8, right:8, background:"rgba(0,0,0,0.7)", border:"none", color:"#fff", borderRadius:"50%", width:28, height:28, cursor:"pointer", fontSize:14, display:"flex", alignItems:"center", justifyContent:"center" }}>✕</button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        ):(
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:20 }}>
+            {playlists.map(pl=>(
+              <div key={pl.id} onClick={()=>setOpenPl(pl.id)} style={{ background:cb, borderRadius:16, overflow:"hidden", border:`1px solid ${bdr}`, cursor:"pointer", transition:"transform 0.2s" }}
+                onMouseEnter={e=>e.currentTarget.style.transform="translateY(-2px)"}
+                onMouseLeave={e=>e.currentTarget.style.transform="translateY(0)"}>
+                <div style={{ height:140, background:`linear-gradient(135deg,${["#6366f1","#ec4899","#f59e0b","#10b981"][playlists.indexOf(pl)%4]}33,#0a0a1a)`, display:"flex", alignItems:"center", justifyContent:"center", position:"relative" }}>
+                  {pl.videos[0]?.snippet?.thumbnails?.medium?.url
+                    ? <img src={pl.videos[0].snippet.thumbnails.medium.url} alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }}/>
+                    : <div style={{ fontSize:40 }}>📋</div>}
+                  <div style={{ position:"absolute", bottom:8, right:8, background:"rgba(0,0,0,0.8)", color:"#fff", fontSize:11, padding:"2px 8px", borderRadius:4 }}>{pl.videos.length} videos</div>
+                </div>
+                <div style={{ padding:"14px 16px" }}>
+                  <div style={{ fontSize:15, fontWeight:700, color:tp, marginBottom:4 }}>{pl.name}</div>
+                  <div style={{ fontSize:12, color:ts }}>Created {fmtDate(pl.createdAt)}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )
+      )}
+    </div>
+  );
+};
+
+// ============================================================
+// SHORTS PAGE
+// ============================================================
+const ShortsPage = ({ dm, onVideoClick }) => {
+  const [videos, setVideos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [current, setCurrent] = useState(0);
+  const bg=dm?"#0a0a14":"#f9f9f9", tp=dm?"#f0f0f0":"#0f0f0f", ts=dm?"#8a8a9a":"#606060";
+
+  useEffect(()=>{
+    if (!API_KEY) { setLoading(false); return; }
+    ytFetch(`${YT_BASE}/search?part=snippet&q=shorts+vertical+video+60seconds&type=video&maxResults=20&videoDuration=short&key=${API_KEY}`)
+      .then(async data=>{
+        const ids=(data.items||[]).map(i=>i.id?.videoId).filter(Boolean);
+        if (!ids.length){setLoading(false);return;}
+        const det=await getDetails(ids).catch(()=>[]);
+        setVideos(det); setLoading(false);
+      }).catch(()=>setLoading(false));
+  },[]);
+
+  const handleScroll = (e) => {
+    const el = e.currentTarget;
+    const idx = Math.round(el.scrollTop / el.clientHeight);
+    setCurrent(idx);
+  };
+
+  return (
+    <div style={{ flex:1, background:"#000", display:"flex", flexDirection:"column", position:"relative" }}>
+      <div style={{ padding:"16px 20px", display:"flex", alignItems:"center", gap:10, background:"rgba(0,0,0,0.8)", backdropFilter:"blur(10px)", borderBottom:"1px solid rgba(255,255,255,0.1)" }}>
+        <div style={{ width:4, height:20, background:"linear-gradient(180deg,#6366f1,#ec4899)", borderRadius:2 }}/>
+        <span style={{ color:"#fff", fontWeight:700, fontSize:18 }}>🎬 Shorts</span>
+      </div>
+      {loading?(
+        <div style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center" }}>
+          <div style={{ display:"flex", gap:8 }}>{[0,1,2].map(i=><div key={i} style={{ width:12, height:12, borderRadius:"50%", background:"#6366f1", animation:`bounce 0.6s ${i*0.15}s infinite alternate` }}/>)}</div>
+        </div>
+      ):(
+        <div onScroll={handleScroll} style={{ flex:1, overflowY:"scroll", scrollSnapType:"y mandatory", scrollbarWidth:"none" }}>
+          {videos.map((video,i)=>{
+            const sn=video.snippet||{}, st=video.statistics||{};
+            const vid=video.id?.videoId||video.id;
+            const thumb=sn.thumbnails?.high?.url||sn.thumbnails?.medium?.url||"";
+            return (
+              <div key={vid} style={{ height:"calc(100vh - 120px)", scrollSnapAlign:"start", display:"flex", justifyContent:"center", alignItems:"center", background:"#000", position:"relative" }}>
+                <div style={{ position:"relative", height:"100%", maxWidth:400, width:"100%", background:"#111" }}>
+                  {thumb&&<img src={thumb} alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }}/>}
+                  {i===current&&(
+                    <iframe src={`https://www.youtube.com/embed/${vid}?autoplay=1&loop=1&mute=0&controls=1&rel=0`}
+                      style={{ position:"absolute", inset:0, width:"100%", height:"100%", border:"none" }} allow="autoplay" title={sn.title}/>
+                  )}
+                  {/* Side Actions */}
+                  <div style={{ position:"absolute", right:-60, bottom:100, display:"flex", flexDirection:"column", gap:20, alignItems:"center" }}>
+                    {[{ic:"👍",l:fmtViews(st.likeCount)},{ic:"💬",l:fmtViews(st.commentCount)},{ic:"↗",l:"Share"},{ic:"⊕",l:"Save"}].map(a=>(
+                      <div key={a.l} style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:4, cursor:"pointer" }}>
+                        <div style={{ width:44, height:44, borderRadius:"50%", background:"rgba(255,255,255,0.15)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:20 }}>{a.ic}</div>
+                        <span style={{ color:"#fff", fontSize:11 }}>{a.l}</span>
+                      </div>
+                    ))}
+                  </div>
+                  {/* Bottom Info */}
+                  <div style={{ position:"absolute", bottom:0, left:0, right:0, padding:"60px 16px 20px", background:"linear-gradient(transparent,rgba(0,0,0,0.8))" }}>
+                    <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:8 }}>
+                      <div style={{ width:32, height:32, borderRadius:"50%", background:clr(sn.channelTitle), display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, color:"#fff" }}>{ini(sn.channelTitle)}</div>
+                      <span style={{ color:"#fff", fontSize:14, fontWeight:600 }}>@{(sn.channelTitle||"").replace(/\s/g,"").toLowerCase()}</span>
+                      <button style={{ marginLeft:8, padding:"4px 12px", background:"transparent", border:"1px solid #fff", borderRadius:20, color:"#fff", fontSize:12, cursor:"pointer" }}>Subscribe</button>
+                    </div>
+                    <div style={{ color:"#fff", fontSize:13, lineHeight:1.4, display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical", overflow:"hidden" }}>{sn.title}</div>
+                  </div>
+                </div>
+                {/* Up/Down arrows */}
+                <div style={{ position:"absolute", right:16, top:"50%", transform:"translateY(-50%)", display:"flex", flexDirection:"column", gap:12 }}>
+                  {i>0&&<button onClick={()=>{ const el=document.getElementById("shorts-scroll"); if(el)el.scrollBy({top:-el.clientHeight,behavior:"smooth"}); }} style={{ background:"rgba(255,255,255,0.15)", border:"none", color:"#fff", width:40, height:40, borderRadius:"50%", cursor:"pointer", fontSize:18 }}>↑</button>}
+                  {i<videos.length-1&&<button onClick={()=>{ const el=document.getElementById("shorts-scroll"); if(el)el.scrollBy({top:el.clientHeight,behavior:"smooth"}); }} style={{ background:"rgba(255,255,255,0.15)", border:"none", color:"#fff", width:40, height:40, borderRadius:"50%", cursor:"pointer", fontSize:18 }}>↓</button>}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ============================================================
+// KEYBOARD SHORTCUTS MODAL
+// ============================================================
+const ShortcutsModal = ({ onClose, dm }) => {
+  const shortcuts = [
+    {key:"K or Space",desc:"Play / Pause"},
+    {key:"F",desc:"Fullscreen"},
+    {key:"M",desc:"Mute / Unmute"},
+    {key:"→ / ←",desc:"Seek 5 seconds"},
+    {key:"J / L",desc:"Seek 10 seconds"},
+    {key:"0-9",desc:"Jump to % of video"},
+    {key:"/",desc:"Focus search bar"},
+    {key:"Escape",desc:"Close / Clear search"},
+    {key:"?",desc:"Show this help"},
+  ];
+  const bg=dm?"#141420":"#fff", tp=dm?"#f0f0f0":"#0f0f0f", ts=dm?"#8a8a9a":"#606060", bdr=dm?"rgba(255,255,255,0.08)":"#e0e0e0";
+  return (
+    <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.7)", zIndex:500, display:"flex", alignItems:"center", justifyContent:"center" }} onClick={onClose}>
+      <div onClick={e=>e.stopPropagation()} style={{ background:bg, borderRadius:20, padding:32, width:"100%", maxWidth:460, border:`1px solid ${bdr}`, boxShadow:"0 30px 80px rgba(0,0,0,0.5)" }}>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:24 }}>
+          <div style={{ fontSize:18, fontWeight:700, color:tp }}>⌨️ Keyboard Shortcuts</div>
+          <button onClick={onClose} style={{ background:"none", border:"none", color:ts, cursor:"pointer", fontSize:22 }}>×</button>
+        </div>
+        {shortcuts.map(s=>(
+          <div key={s.key} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"10px 0", borderBottom:`1px solid ${bdr}` }}>
+            <span style={{ color:ts, fontSize:14 }}>{s.desc}</span>
+            <kbd style={{ background:dm?"rgba(255,255,255,0.08)":"#f0f0f0", border:`1px solid ${bdr}`, borderRadius:6, padding:"3px 10px", fontSize:12, fontFamily:"monospace", color:tp, fontWeight:600 }}>{s.key}</kbd>
+          </div>
+        ))}
+        <div style={{ marginTop:16, fontSize:12, color:ts, textAlign:"center" }}>Press <kbd style={{ background:dm?"rgba(255,255,255,0.08)":"#f0f0f0", border:`1px solid ${bdr}`, borderRadius:4, padding:"1px 6px", fontSize:11 }}>?</kbd> anytime to show this</div>
+      </div>
+    </div>
+  );
+};
+
+// ============================================================
+// ADD TO PLAYLIST MODAL
+// ============================================================
+const AddToPlaylistModal = ({ video, playlists, setPlaylists, onClose, dm }) => {
+  const [newName, setNewName] = useState("");
+  const bg=dm?"#141420":"#fff", tp=dm?"#f0f0f0":"#0f0f0f", ts=dm?"#8a8a9a":"#606060", bdr=dm?"rgba(255,255,255,0.08)":"#e0e0e0", ib=dm?"rgba(255,255,255,0.05)":"#f8f8f8", ibdr=dm?"rgba(255,255,255,0.1)":"#e0e0e0";
+  const vid=video.id?.videoId||video.id;
+
+  const toggle = (plId) => {
+    const newPls = playlists.map(p=>{
+      if (p.id!==plId) return p;
+      const has = p.videos.find(v=>(v.id?.videoId||v.id)===vid);
+      return { ...p, videos: has ? p.videos.filter(v=>(v.id?.videoId||v.id)!==vid) : [...p.videos, video] };
+    });
+    setPlaylists(newPls); storage.set("vt_playlists", newPls);
+  };
+
+  const create = () => {
+    if (!newName.trim()) return;
+    const pl = { id: Date.now().toString(), name: newName.trim(), videos: [video], createdAt: new Date().toISOString() };
+    const newPls = [...playlists, pl];
+    setPlaylists(newPls); storage.set("vt_playlists", newPls);
+    setNewName("");
+  };
+
+  return (
+    <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.7)", zIndex:500, display:"flex", alignItems:"center", justifyContent:"center" }} onClick={onClose}>
+      <div onClick={e=>e.stopPropagation()} style={{ background:bg, borderRadius:20, padding:24, width:"100%", maxWidth:360, border:`1px solid ${bdr}`, boxShadow:"0 30px 80px rgba(0,0,0,0.5)" }}>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:20 }}>
+          <div style={{ fontSize:16, fontWeight:700, color:tp }}>Save to playlist</div>
+          <button onClick={onClose} style={{ background:"none", border:"none", color:ts, cursor:"pointer", fontSize:22 }}>×</button>
+        </div>
+        {playlists.map(pl=>{
+          const has = pl.videos.find(v=>(v.id?.videoId||v.id)===vid);
+          return (
+            <div key={pl.id} onClick={()=>toggle(pl.id)} style={{ display:"flex", alignItems:"center", gap:12, padding:"10px 0", cursor:"pointer", borderBottom:`1px solid ${bdr}` }}>
+              <div style={{ width:20, height:20, borderRadius:4, border:`2px solid ${has?"#6366f1":bdr}`, background:has?"#6366f1":"transparent", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, transition:"all 0.15s" }}>
+                {has&&<svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>}
+              </div>
+              <span style={{ color:tp, fontSize:14 }}>{pl.name}</span>
+              <span style={{ marginLeft:"auto", color:ts, fontSize:12 }}>{pl.videos.length}</span>
+            </div>
+          );
+        })}
+        <div style={{ marginTop:16 }}>
+          <input value={newName} onChange={e=>setNewName(e.target.value)} onKeyDown={e=>e.key==="Enter"&&create()} placeholder="+ Create new playlist"
+            style={{ width:"100%", background:ib, border:`1px solid ${ibdr}`, borderRadius:10, padding:"10px 14px", color:tp, fontSize:13, outline:"none", boxSizing:"border-box" }}/>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
 // ============================================================
 // MAIN APP
 // ============================================================
@@ -918,6 +1344,10 @@ export default function App() {
   const [liked, setLiked] = useState(()=>storage.get("vt_liked")||[]);
   const [watchLater, setWatchLater] = useState(()=>storage.get("vt_watchlater")||[]);
   const [subs, setSubs] = useState(()=>storage.get("vt_subs")||[]);
+  const [playlists, setPlaylists] = useState(()=>storage.get("vt_playlists")||[]);
+  const [watchProgress, setWatchProgress] = useState(()=>storage.get("vt_progress")||{});
+  const [showShortcuts, setShowShortcuts] = useState(false);
+  const [bellSubs, setBellSubs] = useState(()=>storage.get("vt_bell")||[]);
 
   useEffect(()=>{
     const s=document.createElement("style");
@@ -934,6 +1364,19 @@ export default function App() {
   },[]);
 
   useEffect(()=>{ storage.set("vt_dm",dm); document.body.style.background=dm?"#0a0a14":"#f9f9f9"; },[dm]);
+
+  // Keyboard shortcuts
+  useEffect(()=>{
+    const handler = (e) => {
+      const tag = document.activeElement?.tagName;
+      if (tag==="INPUT"||tag==="TEXTAREA") return;
+      if (e.key==="?") { setShowShortcuts(s=>!s); return; }
+      if (e.key==="/" ) { e.preventDefault(); document.querySelector("input[placeholder*='Search']")?.focus(); return; }
+      if (e.key==="Escape") { setShowShortcuts(false); }
+    };
+    window.addEventListener("keydown", handler);
+    return ()=>window.removeEventListener("keydown", handler);
+  }, []);
 
   const nav=(p)=>{ setPage(p); if(p!=="watch"&&p!=="channel")setVideo(null); setShowNotif(false); setShowUserMenu(false); setPrevPage(p); };
   const onVideoClick=(v)=>{ setVideo(v); setPage("watch"); };
@@ -975,6 +1418,9 @@ export default function App() {
       case "watchlater": return <SavedPage items={watchLater} setItems={setWatchLater} stKey="vt_watchlater" title="Watch Later" icon="⏰" emptyMsg="No saved videos yet" onVideoClick={onVideoClick} dm={dm}/>;
       case "search": return <SearchPage query={searchQ} onVideoClick={onVideoClick} dm={dm} onCh={onCh}/>;
       case "upload": return <UploadPage dm={dm}/>;
+      case "analytics": return <AnalyticsPage dm={dm} history={history}/>;
+      case "playlists": return <PlaylistsPage playlists={playlists} setPlaylists={setPlaylists} onVideoClick={onVideoClick} dm={dm}/>;
+      case "shorts": return <ShortsPage dm={dm} onVideoClick={onVideoClick}/>;
       default: return <HomePage onVideoClick={onVideoClick} dm={dm} onCh={onCh}/>;
     }
   };
@@ -1017,6 +1463,14 @@ export default function App() {
           <button onClick={()=>onSearch()} style={{ background:bbg, border:`1px solid ${bdr}`, borderLeft:"none", borderRadius:"0 24px 24px 0", padding:"10px 18px", cursor:"pointer", color:ts, display:"flex" }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
           </button>
+          <button title="Voice search" onClick={()=>{
+            if(!window.SpeechRecognition&&!window.webkitSpeechRecognition){alert("Voice search not supported in your browser");return;}
+            const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+            const sr=new SR(); sr.lang="en-US"; sr.start();
+            sr.onresult=(e)=>{ const t=e.results[0][0].transcript; setSearchIn(t); onSearch(t); };
+          }} style={{ background:"none", border:"none", cursor:"pointer", color:ts, padding:"8px 6px", display:"flex", alignItems:"center", marginLeft:4 }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.91-3c-.49 0-.9.36-.98.85C16.52 14.2 14.47 16 12 16s-4.52-1.8-4.93-4.15c-.08-.49-.49-.85-.98-.85-.61 0-1.09.54-1 1.14.49 3 2.89 5.35 5.91 5.78V20c0 .55.45 1 1 1s1-.45 1-1v-2.08c3.02-.43 5.42-2.78 5.91-5.78.1-.6-.39-1.14-1-1.14z"/></svg>
+          </button>
 
           {/* Suggestions Dropdown */}
           {searchFocused && (searchIn.trim() ? suggestions.length > 0 : true) && (
@@ -1054,7 +1508,11 @@ export default function App() {
         </div>
 
         <div style={{ marginLeft:"auto", display:"flex", alignItems:"center", gap:8 }}>
-          <button onClick={()=>setDm(d=>!d)} style={{ background:bbg, border:`1px solid ${bdr}`, borderRadius:24, padding:"7px 12px", color:ts, cursor:"pointer", fontSize:16 }}>{dm?"☀️":"🌙"}</button>
+          <button onClick={()=>setDm(d=>!d)} style={{ background:bbg, border:`1px solid ${bdr}`, borderRadius:24, padding:"7px 12px", color:ts, cursor:"pointer", fontSize:16 }} title="Toggle dark/light mode">{dm?"☀️":"🌙"}</button>
+          <button onClick={()=>setShowShortcuts(true)} style={{ background:bbg, border:`1px solid ${bdr}`, borderRadius:24, padding:"7px 12px", color:ts, cursor:"pointer", fontSize:14, fontWeight:600 }} title="Keyboard shortcuts (?)">⌨️</button>
+          <button onClick={()=>nav("shorts")} style={{ background:bbg, border:`1px solid ${bdr}`, borderRadius:24, padding:"7px 14px", color:ts, cursor:"pointer", fontSize:13, display:"flex", alignItems:"center", gap:6, fontWeight:500 }}>
+            🎬 Shorts
+          </button>
           <button onClick={()=>nav("upload")} style={{ background:bbg, border:`1px solid ${bdr}`, borderRadius:24, padding:"7px 14px", color:ts, cursor:"pointer", fontSize:13, display:"flex", alignItems:"center", gap:6, fontWeight:500 }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>
             Upload
@@ -1090,7 +1548,7 @@ export default function App() {
                     <div style={{ color:tp, fontWeight:600, fontSize:14 }}>{user.name}</div>
                     <div style={{ color:ts, fontSize:12, marginTop:2 }}>{user.email}</div>
                   </div>
-                  {[{l:"📜 History",p:"history"},{l:"👍 Liked Videos",p:"liked"},{l:"⏰ Watch Later",p:"watchlater"},{l:"📢 Subscriptions",p:"subscriptions"},{l:"⬆️ Upload Studio",p:"upload"}].map(it=>(
+                  {[{l:"📜 History",p:"history"},{l:"👍 Liked Videos",p:"liked"},{l:"⏰ Watch Later",p:"watchlater"},{l:"📋 Playlists",p:"playlists"},{l:"📢 Subscriptions",p:"subscriptions"},{l:"📊 Analytics",p:"analytics"},{l:"⬆️ Upload Studio",p:"upload"}].map(it=>(
                     <button key={it.p} onClick={()=>{nav(it.p);setShowUserMenu(false);}}
                       style={{ width:"100%", background:"transparent", border:"none", padding:"10px 16px", color:ts, cursor:"pointer", textAlign:"left", fontSize:13 }}
                       onMouseEnter={e=>e.currentTarget.style.background=dm?"rgba(255,255,255,0.05)":"rgba(0,0,0,0.04)"}
@@ -1124,6 +1582,7 @@ export default function App() {
       </div>
 
       {(showNotif||showUserMenu)&&<div style={{ position:"fixed", inset:0, zIndex:99 }} onClick={()=>{setShowNotif(false);setShowUserMenu(false);}}/>}
+      {showShortcuts&&<ShortcutsModal onClose={()=>setShowShortcuts(false)} dm={dm}/>}
     </div>
   );
 }
