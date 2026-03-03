@@ -903,6 +903,11 @@ export default function App() {
   const [chName, setChName] = useState("");
   const [searchIn, setSearchIn] = useState("");
   const [searchQ, setSearchQ] = useState("");
+  const [searchFocused, setSearchFocused] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
+  const [prevPage, setPrevPage] = useState("home");
+  const searchRef = useRef(null);
+  const suggestTimer = useRef(null);
   const [collapsed, setCollapsed] = useState(false);
   const [showNotif, setShowNotif] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -930,10 +935,27 @@ export default function App() {
 
   useEffect(()=>{ storage.set("vt_dm",dm); document.body.style.background=dm?"#0a0a14":"#f9f9f9"; },[dm]);
 
-  const nav=(p)=>{ setPage(p); if(p!=="watch"&&p!=="channel")setVideo(null); setShowNotif(false); setShowUserMenu(false); };
+  const nav=(p)=>{ setPage(p); if(p!=="watch"&&p!=="channel")setVideo(null); setShowNotif(false); setShowUserMenu(false); setPrevPage(p); };
   const onVideoClick=(v)=>{ setVideo(v); setPage("watch"); };
   const onCh=(id,name)=>{ setChId(id); setChName(name); setPage("channel"); };
-  const onSearch=()=>{ if(searchIn.trim()){setSearchQ(searchIn);setPage("search");} };
+  const onSearch=(q)=>{
+    const query = q || searchIn;
+    if(query.trim()){ setSearchQ(query); setSearchIn(query); setPage("search"); setSuggestions([]); setSearchFocused(false); }
+  };
+  const onClearSearch=()=>{ setSearchIn(""); setSuggestions([]); setSearchFocused(false); nav(prevPage==="search"?"home":prevPage); };
+
+  // Fetch suggestions with debounce
+  const fetchSuggestions = useCallback((val) => {
+    clearTimeout(suggestTimer.current);
+    if (!val.trim() || !API_KEY) { setSuggestions([]); return; }
+    suggestTimer.current = setTimeout(async () => {
+      try {
+        const data = await ytFetch(`${YT_BASE}/search?part=snippet&q=${encodeURIComponent(val)}&type=video&maxResults=8&key=${API_KEY}`);
+        const titles = [...new Set((data.items||[]).map(i=>i.snippet?.title||"").filter(Boolean))].slice(0,7);
+        setSuggestions(titles);
+      } catch(e) { setSuggestions([]); }
+    }, 350);
+  }, []);
   const onLogin=(u)=>{ setUser(u); setShowLogin(false); storage.set("vt_user",u); };
   const onLogout=()=>{ setUser(null); storage.set("vt_user",null); setShowUserMenu(false); };
 
@@ -973,14 +995,62 @@ export default function App() {
           </div>
         </div>
 
-        <div style={{ display:"flex", alignItems:"center", flex:1, maxWidth:580 }}>
-          <div style={{ flex:1, display:"flex", alignItems:"center", background:dm?"rgba(255,255,255,0.05)":"#f8f8f8", border:`1px solid ${bdr}`, borderRadius:"24px 0 0 24px", overflow:"hidden" }}>
-            <input value={searchIn} onChange={e=>setSearchIn(e.target.value)} onKeyDown={e=>e.key==="Enter"&&onSearch()} placeholder="Search videos, channels..."
-              style={{ flex:1, background:"transparent", border:"none", outline:"none", color:tp, fontSize:14, padding:"10px 16px" }}/>
+        <div ref={searchRef} style={{ display:"flex", alignItems:"center", flex:1, maxWidth:580, position:"relative" }}>
+          <div style={{ flex:1, display:"flex", alignItems:"center", background:searchFocused?(dm?"rgba(255,255,255,0.08)":"#fff"):(dm?"rgba(255,255,255,0.05)":"#f8f8f8"), border:`1px solid ${searchFocused?"rgba(99,102,241,0.5)":bdr}`, borderRadius:"24px 0 0 24px", overflow:"hidden", transition:"all 0.2s", boxShadow:searchFocused?"0 0 0 3px rgba(99,102,241,0.12)":"none" }}>
+            <input
+              value={searchIn}
+              onChange={e=>{ setSearchIn(e.target.value); fetchSuggestions(e.target.value); }}
+              onFocus={()=>setSearchFocused(true)}
+              onBlur={()=>setTimeout(()=>setSearchFocused(false),180)}
+              onKeyDown={e=>{ if(e.key==="Enter")onSearch(); if(e.key==="Escape")onClearSearch(); }}
+              placeholder="Search videos, channels..."
+              style={{ flex:1, background:"transparent", border:"none", outline:"none", color:tp, fontSize:14, padding:"10px 16px" }}
+            />
+            {searchIn&&(
+              <button onClick={onClearSearch}
+                style={{ background:"none", border:"none", cursor:"pointer", color:ts, padding:"0 10px", display:"flex", alignItems:"center", fontSize:18, lineHeight:1 }}
+                title="Clear search">
+                ✕
+              </button>
+            )}
           </div>
-          <button onClick={onSearch} style={{ background:bbg, border:`1px solid ${bdr}`, borderLeft:"none", borderRadius:"0 24px 24px 0", padding:"10px 18px", cursor:"pointer", color:ts, display:"flex" }}>
+          <button onClick={()=>onSearch()} style={{ background:bbg, border:`1px solid ${bdr}`, borderLeft:"none", borderRadius:"0 24px 24px 0", padding:"10px 18px", cursor:"pointer", color:ts, display:"flex" }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
           </button>
+
+          {/* Suggestions Dropdown */}
+          {searchFocused && (searchIn.trim() ? suggestions.length > 0 : true) && (
+            <div style={{ position:"absolute", top:"calc(100% + 6px)", left:0, right:0, background:dm?"#141420":"#fff", border:`1px solid ${dm?"rgba(255,255,255,0.1)":"#e0e0e0"}`, borderRadius:14, overflow:"hidden", boxShadow:"0 16px 48px rgba(0,0,0,0.25)", zIndex:300 }}>
+              {!searchIn.trim() ? (
+                <>
+                  <div style={{ padding:"10px 16px 6px", fontSize:11, color:dm?"#555":"#909090", textTransform:"uppercase", letterSpacing:"0.07em", fontWeight:600 }}>Trending Searches</div>
+                  {["JavaScript tutorial 2024","React hooks explained","Python machine learning","System design interview","CSS animations","Node.js REST API","TypeScript for beginners","Docker tutorial"].map((s,i)=>(
+                    <div key={i} onMouseDown={()=>onSearch(s)}
+                      style={{ display:"flex", alignItems:"center", gap:12, padding:"10px 16px", cursor:"pointer", transition:"background 0.1s" }}
+                      onMouseEnter={e=>e.currentTarget.style.background=dm?"rgba(255,255,255,0.05)":"rgba(0,0,0,0.04)"}
+                      onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+                      <span style={{ fontSize:16 }}>🔥</span>
+                      <span style={{ color:dm?"#d0d0e0":"#0f0f0f", fontSize:14 }}>{s}</span>
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <>
+                  <div style={{ padding:"10px 16px 6px", fontSize:11, color:dm?"#555":"#909090", textTransform:"uppercase", letterSpacing:"0.07em", fontWeight:600 }}>Suggestions</div>
+                  {suggestions.map((s,i)=>(
+                    <div key={i} onMouseDown={()=>onSearch(s)}
+                      style={{ display:"flex", alignItems:"center", gap:12, padding:"10px 16px", cursor:"pointer", transition:"background 0.1s" }}
+                      onMouseEnter={e=>e.currentTarget.style.background=dm?"rgba(255,255,255,0.05)":"rgba(0,0,0,0.04)"}
+                      onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill={dm?"#555":"#909090"}><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                      <span style={{ color:dm?"#d0d0e0":"#0f0f0f", fontSize:14, flex:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{s}</span>
+                      <button onMouseDown={e=>{e.stopPropagation();setSearchIn(s);fetchSuggestions(s);}} style={{ background:"none", border:"none", color:dm?"#555":"#909090", cursor:"pointer", fontSize:12, transform:"rotate(315deg)", padding:"2px 4px", flexShrink:0 }}>↗</button>
+                    </div>
+                  ))}
+                </>
+              )}
+            </div>
+          )}
         </div>
 
         <div style={{ marginLeft:"auto", display:"flex", alignItems:"center", gap:8 }}>
