@@ -3,9 +3,39 @@ import { useState, useEffect, useRef, useCallback } from "react";
 const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
 const YT_BASE = "https://www.googleapis.com/youtube/v3";
 
+// localStorage — only used for dark mode preference (no user data stored here anymore)
 const storage = {
   get: (k) => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
   set: (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+};
+
+// ── Backend API helper ─────────────────────────────────────────────
+const API_BASE = import.meta.env.VITE_API_URL || "https://videotube-backend.onrender.com";
+
+const api = {
+  // Get stored token
+  token: () => localStorage.getItem("vt_token"),
+
+  // Make authenticated request
+  req: async (method, path, body) => {
+    const token = localStorage.getItem("vt_token");
+    const res = await fetch(`${API_BASE}${path}`, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      ...(body ? { body: JSON.stringify(body) } : {}),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Request failed");
+    return data;
+  },
+
+  get:    (path)       => api.req("GET",    path),
+  post:   (path, body) => api.req("POST",   path, body),
+  put:    (path, body) => api.req("PUT",    path, body),
+  delete: (path)       => api.req("DELETE", path),
 };
 
 const fmtViews = (n) => {
@@ -244,7 +274,8 @@ const WatchPage = ({ video, onVideoClick, dm, onCh, user, history, setHistory, l
     if (!vid) return;
     const h = history||[];
     const newH = [video, ...h.filter(v=>(v.id?.videoId||v.id)!==vid)].slice(0,100);
-    setHistory(newH); storage.set("vt_history",newH);
+    setHistory(newH);
+    if(user) api.post("/api/user/history",{ videoId:vid, title:sn.title, thumbnail:sn.thumbnails?.medium?.url, channelTitle:sn.channelTitle, channelId:sn.channelId }).catch(()=>{});
     if (!API_KEY) return;
     fetch(`${YT_BASE}/commentThreads?part=snippet&videoId=${vid}&maxResults=30&order=relevance&key=${API_KEY}`)
       .then(r=>r.json()).then(d=>{ if(!d.error)setComments(d.items||[]); }).catch(()=>{});
@@ -261,12 +292,14 @@ const WatchPage = ({ video, onVideoClick, dm, onCh, user, history, setHistory, l
   const toggleLike = () => {
     const l=liked||[];
     const newL = isLiked?l.filter(v=>(v.id?.videoId||v.id)!==vid):[video,...l];
-    setLiked(newL); storage.set("vt_liked",newL);
+    setLiked(newL);
+    if(user) api.post("/api/user/liked",{ videoId:vid, title:sn.title, thumbnail:sn.thumbnails?.medium?.url, channelTitle:sn.channelTitle, channelId:sn.channelId, viewCount:st.viewCount, likeCount:st.likeCount, duration:cd.duration, publishedAt:sn.publishedAt }).catch(()=>{});
   };
   const toggleWL = () => {
     const w=watchLater||[];
     const newW = isWL?w.filter(v=>(v.id?.videoId||v.id)!==vid):[video,...w];
-    setWatchLater(newW); storage.set("vt_watchlater",newW);
+    setWatchLater(newW);
+    if(user) api.post("/api/user/watchlater",{ videoId:vid, title:sn.title, thumbnail:sn.thumbnails?.medium?.url, channelTitle:sn.channelTitle, channelId:sn.channelId, viewCount:st.viewCount, duration:cd.duration, publishedAt:sn.publishedAt }).catch(()=>{});
   };
 
   const tp=dm?"#f0f0f0":"#0f0f0f", ts=dm?"#8a8a9a":"#606060", bg=dm?"#0a0a14":"#f9f9f9";
@@ -464,7 +497,8 @@ const ChannelPage = ({ channelId, channelName, onVideoClick, dm, subs, setSubs }
   const toggleSub = () => {
     const s=subs||[], n=channel?.snippet?.title||channelName;
     const newS = isSubbed?s.filter(x=>x.channelId!==channelId):[...s,{channelId,channelName:n}];
-    setSubs(newS); storage.set("vt_subs",newS);
+    setSubs(newS);
+    if(user) api.post("/api/user/subscriptions",{ channelId, channelName:ch.snippet?.title||channelName }).catch(()=>{});
   };
 
   const sn=channel?.snippet||{}, st=channel?.statistics||{};
@@ -590,8 +624,8 @@ const SearchPage = ({ query, onVideoClick, dm, onCh }) => {
 
 // HISTORY PAGE
 const HistoryPage = ({ history, setHistory, onVideoClick, dm }) => {
-  const clear = () => { setHistory([]); storage.set("vt_history",[]); };
-  const remove = (vid) => { const h=history.filter(v=>(v.id?.videoId||v.id)!==vid); setHistory(h); storage.set("vt_history",h); };
+  const clear = () => { setHistory([]); api.delete("/api/user/history").catch(()=>{}); };
+  const remove = (vid) => { const h=history.filter(v=>(v.id?.videoId||v.id)!==vid); setHistory(h); api.delete(`/api/user/history/${vid}`).catch(()=>{}); };
   const bg=dm?"#0a0a14":"#f9f9f9", tp=dm?"#f0f0f0":"#0f0f0f", ts=dm?"#8a8a9a":"#606060", bdr=dm?"rgba(255,255,255,0.05)":"#e0e0e0";
 
   return (
@@ -631,8 +665,13 @@ const HistoryPage = ({ history, setHistory, onVideoClick, dm }) => {
 
 // SAVED PAGE (liked / watch later)
 const SavedPage = ({ items, setItems, stKey, title, icon, emptyMsg, onVideoClick, dm }) => {
-  const clear = () => { setItems([]); storage.set(stKey,[]); };
-  const remove = (vid) => { const n=items.filter(v=>(v.id?.videoId||v.id)!==vid); setItems(n); storage.set(stKey,n); };
+  const apiPath = stKey==="vt_liked"?"/api/user/liked":"/api/user/watchlater";
+  const clear = () => { setItems([]); };
+  const remove = (vid) => {
+    const n=items.filter(v=>(v.id?.videoId||v.id)!==vid); setItems(n);
+    // Toggle off on backend by sending the videoId
+    api.post(apiPath,{ videoId: vid }).catch(()=>{});
+  };
   const bg=dm?"#0a0a14":"#f9f9f9", tp=dm?"#f0f0f0":"#0f0f0f", ts=dm?"#8a8a9a":"#606060";
 
   return (
@@ -867,7 +906,21 @@ const LoginPage = ({ onLogin, dm, onBack }) => {
           <div style={{ color:ts, fontSize:14 }}>{isLogin?"Sign in to your account":"Create your free account"}</div>
         </div>
         <div style={{ background:cb, borderRadius:20, padding:32, border:dm?"1px solid rgba(255,255,255,0.07)":"1px solid #e0e0e0", boxShadow:dm?"0 20px 60px rgba(0,0,0,0.4)":"0 8px 30px rgba(0,0,0,0.08)" }}>
-          <button onClick={()=>onLogin({name:"Demo User",email:"demo@videotube.com",avatar:"DU"})}
+          <button onClick={async()=>{
+            setLoading(true); setError("");
+            try {
+              const data = await api.post("/api/auth/login",{email:"demo@videotube.com",password:"demo123456"});
+              localStorage.setItem("vt_token",data.token);
+              onLogin(data.user, data.token);
+            } catch {
+              // If demo account doesn't exist, create it
+              try {
+                const data = await api.post("/api/auth/register",{name:"Demo User",email:"demo@videotube.com",password:"demo123456"});
+                localStorage.setItem("vt_token",data.token);
+                onLogin(data.user, data.token);
+              } catch(e){ setError(e.message); }
+            } finally { setLoading(false); }
+          }}
             style={{ width:"100%", padding:12, background:ib, border:`1px solid ${ibdr}`, borderRadius:12, color:tp, fontSize:14, fontWeight:600, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", gap:10, marginBottom:20 }}>
             <svg width="18" height="18" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -1045,21 +1098,27 @@ const PlaylistsPage = ({ playlists, setPlaylists, onVideoClick, dm }) => {
 
   const createPlaylist = () => {
     if (!newName.trim()) return;
-    const pl = { id: Date.now().toString(), name: newName.trim(), videos: [], createdAt: new Date().toISOString() };
-    const newPls = [...playlists, pl];
-    setPlaylists(newPls); storage.set("vt_playlists", newPls);
+    try {
+      const data = await api.post("/api/user/playlists",{ name: newName.trim() });
+      setPlaylists(data.playlists);
+    } catch { 
+      const pl={id:Date.now().toString(),name:newName.trim(),videos:[],createdAt:new Date().toISOString()};
+      setPlaylists(p=>[pl,...p]);
+    }
     setNewName(""); setShowCreate(false);
   };
 
   const deletePlaylist = (id) => {
-    const newPls = playlists.filter(p=>p.id!==id);
-    setPlaylists(newPls); storage.set("vt_playlists", newPls);
+    api.delete(`/api/user/playlists/${id}`).then(d=>setPlaylists(d.playlists)).catch(()=>{
+      setPlaylists(p=>p.filter(pl=>pl.id!==id));
+    });
     if (openPl===id) setOpenPl(null);
   };
 
   const removeFromPlaylist = (plId, vidId) => {
     const newPls = playlists.map(p=>p.id===plId?{...p,videos:p.videos.filter(v=>(v.id?.videoId||v.id)!==vidId)}:p);
-    setPlaylists(newPls); storage.set("vt_playlists", newPls);
+    setPlaylists(newPls);
+    api.post(`/api/user/playlists/${plId}/videos`,{ video:{id:vidId} }).catch(()=>{});
   };
 
   const openedPl = playlists.find(p=>p.id===openPl);
@@ -1308,14 +1367,22 @@ const AddToPlaylistModal = ({ video, playlists, setPlaylists, onClose, dm }) => 
       const has = p.videos.find(v=>(v.id?.videoId||v.id)===vid);
       return { ...p, videos: has ? p.videos.filter(v=>(v.id?.videoId||v.id)!==vid) : [...p.videos, video] };
     });
-    setPlaylists(newPls); storage.set("vt_playlists", newPls);
+    setPlaylists(newPls);
+    api.post(`/api/user/playlists/${plId}/videos`,{ video }).catch(()=>{});
   };
 
   const create = () => {
     if (!newName.trim()) return;
-    const pl = { id: Date.now().toString(), name: newName.trim(), videos: [video], createdAt: new Date().toISOString() };
-    const newPls = [...playlists, pl];
-    setPlaylists(newPls); storage.set("vt_playlists", newPls);
+    try {
+      const data = await api.post("/api/user/playlists",{ name: newName.trim() });
+      // Then add the video
+      await api.post(`/api/user/playlists/${data.playlists[0].id}/videos`,{ video });
+      const sync = await api.get("/api/user/sync");
+      if(sync?.data) setPlaylists(sync.data.playlists||[]);
+    } catch {
+      const pl={id:Date.now().toString(),name:newName.trim(),videos:[video],createdAt:new Date().toISOString()};
+      setPlaylists(p=>[pl,...p]);
+    }
     setNewName("");
   };
 
@@ -1368,15 +1435,17 @@ export default function App() {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [dm, setDm] = useState(()=>storage.get("vt_dm")!==false);
-  const [user, setUser] = useState(()=>storage.get("vt_user"));
-  const [history, setHistory] = useState(()=>storage.get("vt_history")||[]);
-  const [liked, setLiked] = useState(()=>storage.get("vt_liked")||[]);
-  const [watchLater, setWatchLater] = useState(()=>storage.get("vt_watchlater")||[]);
-  const [subs, setSubs] = useState(()=>storage.get("vt_subs")||[]);
-  const [playlists, setPlaylists] = useState(()=>storage.get("vt_playlists")||[]);
-  const [watchProgress, setWatchProgress] = useState(()=>storage.get("vt_progress")||{});
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(()=>localStorage.getItem("vt_token"));
+  const [authLoading, setAuthLoading] = useState(true);
+  const [history, setHistory] = useState([]);
+  const [liked, setLiked] = useState([]);
+  const [watchLater, setWatchLater] = useState([]);
+  const [subs, setSubs] = useState([]);
+  const [playlists, setPlaylists] = useState([]);
+  const [watchProgress, setWatchProgress] = useState({});
   const [showShortcuts, setShowShortcuts] = useState(false);
-  const [bellSubs, setBellSubs] = useState(()=>storage.get("vt_bell")||[]);
+  const [bellSubs, setBellSubs] = useState([]);
 
   useEffect(()=>{
     const s=document.createElement("style");
@@ -1394,6 +1463,30 @@ export default function App() {
   },[]);
 
   useEffect(()=>{ storage.set("vt_dm",dm); document.body.style.background=dm?"#0a0a14":"#f9f9f9"; },[dm]);
+
+  // Restore session from token on page load
+  useEffect(()=>{
+    const savedToken = localStorage.getItem("vt_token");
+    if (!savedToken) { setAuthLoading(false); return; }
+    api.get("/api/auth/me")
+      .then(data=>{
+        setUser(data.user);
+        setToken(savedToken);
+        // Load all user data
+        return api.get("/api/user/sync");
+      })
+      .then(data=>{
+        if(data?.data){
+          setHistory(data.data.history||[]);
+          setLiked(data.data.liked||[]);
+          setWatchLater(data.data.watchLater||[]);
+          setSubs(data.data.subscriptions||[]);
+          setPlaylists(data.data.playlists||[]);
+        }
+      })
+      .catch(()=>{ localStorage.removeItem("vt_token"); })
+      .finally(()=>setAuthLoading(false));
+  },[]);
 
   // Keyboard shortcuts
   useEffect(()=>{
@@ -1429,17 +1522,42 @@ export default function App() {
       } catch(e) { setSuggestions([]); }
     }, 350);
   }, []);
-  const onLogin=(u)=>{ setUser(u); setShowLogin(false); storage.set("vt_user",u); };
-  const onLogout=()=>{ setUser(null); storage.set("vt_user",null); setShowUserMenu(false); };
+  const onLogin=async(u, tok)=>{
+    setUser(u); setToken(tok); setShowLogin(false);
+    // Load user data from backend
+    try {
+      const data = await api.get("/api/user/sync");
+      if(data?.data){
+        setHistory(data.data.history||[]);
+        setLiked(data.data.liked||[]);
+        setWatchLater(data.data.watchLater||[]);
+        setSubs(data.data.subscriptions||[]);
+        setPlaylists(data.data.playlists||[]);
+      }
+    } catch(e){ console.error("Sync failed:", e); }
+  };
+  const onLogout=()=>{
+    setUser(null); setToken(null);
+    localStorage.removeItem("vt_token");
+    setHistory([]); setLiked([]); setWatchLater([]); setSubs([]); setPlaylists([]);
+    setShowUserMenu(false);
+  };
 
   const hBg=dm?"rgba(10,10,20,0.97)":"rgba(255,255,255,0.97)", tp=dm?"#f0f0f0":"#0f0f0f", ts=dm?"#8a8a9a":"#606060", bdr=dm?"rgba(255,255,255,0.06)":"#e0e0e0", bbg=dm?"rgba(255,255,255,0.06)":"#f0f0f0";
+
+  if (authLoading) return (
+    <div style={{ minHeight:"100vh", background:dm?"#0a0a14":"#f9f9f9", display:"flex", alignItems:"center", justifyContent:"center", flexDirection:"column", gap:16 }}>
+      <div style={{ fontFamily:"'DM Mono',monospace", fontSize:22, fontWeight:800, color:"#6366f1" }}>video<span style={{color:"#f0f0f0"}}>tube</span></div>
+      <div style={{ display:"flex", gap:8 }}>{[0,1,2].map(i=><div key={i} style={{ width:10, height:10, borderRadius:"50%", background:"#6366f1", animation:`bounce 0.6s ${i*0.15}s infinite alternate` }}/>)}</div>
+    </div>
+  );
 
   const renderPage=()=>{
     if (showLogin) return <LoginPage onLogin={onLogin} dm={dm} onBack={()=>setShowLogin(false)}/>;
     switch(page){
       case "home": return <HomePage onVideoClick={onVideoClick} dm={dm} onCh={onCh}/>;
-      case "watch": return video?<WatchPage video={video} onVideoClick={onVideoClick} dm={dm} onCh={onCh} user={user} history={history} setHistory={setHistory} liked={liked} setLiked={setLiked} watchLater={watchLater} setWatchLater={setWatchLater}/>:<HomePage onVideoClick={onVideoClick} dm={dm} onCh={onCh}/>;
-      case "channel": return <ChannelPage channelId={chId} channelName={chName} onVideoClick={onVideoClick} dm={dm} subs={subs} setSubs={setSubs}/>;
+      case "watch": return video?<WatchPage video={video} onVideoClick={onVideoClick} dm={dm} onCh={onCh} user={user} history={history} setHistory={setHistory} liked={liked} setLiked={setLiked} watchLater={watchLater} setWatchLater={setWatchLater} playlists={playlists} setPlaylists={setPlaylists}/>:<HomePage onVideoClick={onVideoClick} dm={dm} onCh={onCh}/>;
+      case "channel": return <ChannelPage channelId={chId} channelName={chName} onVideoClick={onVideoClick} dm={dm} subs={subs} setSubs={setSubs} user={user}/>;
       case "trending": return <TrendingPage onVideoClick={onVideoClick} dm={dm} onCh={onCh}/>;
       case "live": return <LivePage onVideoClick={onVideoClick} dm={dm} onCh={onCh}/>;
       case "subscriptions": return <SubsPage subs={subs} onVideoClick={onVideoClick} dm={dm} onCh={onCh}/>;
